@@ -3,6 +3,7 @@ import { color } from '@/constants/color';
 import Register from '@/modules/register';
 import Splash from '@/modules/splash';
 import Welcome from '@/modules/welcome';
+import Alldone from '@/modules/alldone';
 import { RootStackRoute } from '@/types/navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -28,6 +29,7 @@ function App(): JSX.Element {
         <Stack.Screen name="welcome" component={Welcome} />
         <Stack.Screen name="login" component={Splash} />
         <Stack.Screen name="register" component={Register} />
+        <Stack.Screen name="alldone" component={Alldone} />
       </Stack.Navigator>
     </NavigationContainer>
   );
