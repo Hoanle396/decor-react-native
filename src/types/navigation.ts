@@ -4,4 +4,5 @@ export type RootStackRoute = {
   register: undefined;
   home: undefined;
   welcome: undefined;
+  alldone: undefined;
 };
