@@ -18,5 +18,6 @@ module.exports = {
     ],
     'no-console': 'warn',
     'react/no-unstable-nested-components': 'off',
+    'react-native/no-inline-styles': 'off',
   },
 };

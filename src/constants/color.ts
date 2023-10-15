@@ -6,9 +6,9 @@ export const color = {
     light: '#1B86CE',
   },
   text: {
-    main: '#757575',
-    light: '#CBCBCB',
-    dark: '#141414',
+    main: '#808080',
+    light: '#3C3C4399',
+    dark: '#31373E',
   },
   white: '#FFFFFF',
   success: {
@@ -21,5 +21,9 @@ export const color = {
   warning: {
     main: '#FFA940',
     light: '#FDB528',
+  },
+  background: {
+    default: '#FFFFFF',
+    secondary: '#F2F2F2',
   },
 };

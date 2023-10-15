@@ -1,6 +1,8 @@
 import StatusBar from '@/components/StatusBar';
 import { color } from '@/constants/color';
+import Register from '@/modules/register';
 import Splash from '@/modules/splash';
+import Welcome from '@/modules/welcome';
 import { RootStackRoute } from '@/types/navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -15,12 +17,17 @@ function App(): JSX.Element {
         barStyle="dark-content"
         backgroundColor={color.white}
       />
-      <Stack.Navigator initialRouteName="splash">
-        <Stack.Screen
-          name="splash"
-          options={{ header: () => null }}
-          component={Splash}
-        />
+      <Stack.Navigator
+        initialRouteName="splash"
+        screenOptions={{
+          header: () => null,
+          animation: 'fade',
+        }}
+      >
+        <Stack.Screen name="splash" component={Splash} />
+        <Stack.Screen name="welcome" component={Welcome} />
+        <Stack.Screen name="login" component={Splash} />
+        <Stack.Screen name="register" component={Register} />
       </Stack.Navigator>
     </NavigationContainer>
   );
