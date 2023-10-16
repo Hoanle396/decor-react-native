@@ -9,6 +9,7 @@ export const color = {
     main: '#808080',
     light: '#3C3C4399',
     dark: '#31373E',
+    grey: '#798C97',
   },
   white: '#FFFFFF',
   success: {
