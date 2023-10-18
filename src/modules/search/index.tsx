@@ -18,33 +18,35 @@ const Search: FCC<{}> = () => {
   return (
     <>
       <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.root}>
         <Image
           style={styles.image}
           source={require('@/assets/logo.png')}
           alt="Logo Image"
         />
-        <View style={styles.search}>
-          <Ionicons
-            style={styles.iconsearch}
-            name="search"
-            size={24}
-            color="black"
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={onChangeText}
-            value={text}
-            placeholder="Tìm kiếm"
-          />
-        </View>
-        <View style={styles.body}>
-          <View style={styles.text2}>
-            <Text style={styles.lastInput}>Tìm kiếm lần cuối</Text>
-            <Text style={styles.deleteAll}>xóa tất cả</Text>
+        <View style={styles.container}>
+          <View style={styles.search}>
+            <Ionicons
+              style={styles.iconsearch}
+              name="search"
+              size={24}
+              color="black"
+            />
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangeText}
+              value={text}
+              placeholder="Tìm kiếm"
+            />
           </View>
-          <Text style={styles.result}>Đèn thả quả bồ công anh</Text>
-          <Text style={styles.result}>Thảm lông trải sàn</Text>
+          <View style={styles.body}>
+            <View style={styles.text2}>
+              <Text style={styles.lastInput}>Tìm kiếm lần cuối</Text>
+              <Text style={styles.deleteAll}>xóa tất cả</Text>
+            </View>
+            <Text style={styles.result}>Đèn thả quả bồ công anh</Text>
+            <Text style={styles.result}>Thảm lông trải sàn</Text>
+          </View>
         </View>
       </SafeAreaView>
     </>
@@ -54,8 +56,15 @@ const Search: FCC<{}> = () => {
 export default Search;
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: color.white,
+    alignItems: 'center',
+    gap: 58,
+  },
   container: {
     flex: 1,
+    width: '100%',
     backgroundColor: color.white,
     alignItems: 'center',
     gap: 58,
@@ -93,9 +102,8 @@ const styles = StyleSheet.create({
   body: {
     width: '100%',
     display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
     gap: 24,
+    paddingHorizontal: '1%',
   },
   text2: {
     width: '100%',
