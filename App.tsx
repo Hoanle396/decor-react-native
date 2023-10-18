@@ -10,6 +10,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import Login from '@/modules/login';
+import BottomTab from '@/navigations';
 function App(): JSX.Element {
   const Stack = createNativeStackNavigator<RootStackRoute>();
 
@@ -21,7 +22,7 @@ function App(): JSX.Element {
         backgroundColor={color.white}
       />
       <Stack.Navigator
-        initialRouteName="splash"
+        initialRouteName="home"
         screenOptions={{
           header: () => null,
           animation: 'fade',
@@ -33,6 +34,7 @@ function App(): JSX.Element {
         <Stack.Screen name="register" component={Register} />
         <Stack.Screen name="alldone" component={Alldone} />
         <Stack.Screen name="search" component={Search} />
+        <Stack.Screen name="home" component={BottomTab} />
       </Stack.Navigator>
     </NavigationContainer>
   );

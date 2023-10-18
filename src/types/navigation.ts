@@ -6,4 +6,5 @@ export type RootStackRoute = {
   welcome: undefined;
   alldone: undefined;
   search: undefined;
+  products: undefined;
 };

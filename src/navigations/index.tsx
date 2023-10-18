@@ -4,7 +4,8 @@ import Splash from '@/modules/splash';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
-import { Platform, View, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
+import CategoryNavigation from './Category';
 
 const Tab = createBottomTabNavigator();
 
@@ -69,7 +70,7 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name="Statistics"
-        component={Splash}
+        component={CategoryNavigation}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.iconTop}>
