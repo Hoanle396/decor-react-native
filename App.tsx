@@ -9,6 +9,7 @@ import { RootStackRoute } from '@/types/navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import Login from '@/modules/login';
 function App(): JSX.Element {
   const Stack = createNativeStackNavigator<RootStackRoute>();
 
@@ -28,7 +29,7 @@ function App(): JSX.Element {
       >
         <Stack.Screen name="splash" component={Splash} />
         <Stack.Screen name="welcome" component={Welcome} />
-        <Stack.Screen name="login" component={Splash} />
+        <Stack.Screen name="login" component={Login} />
         <Stack.Screen name="register" component={Register} />
         <Stack.Screen name="alldone" component={Alldone} />
         <Stack.Screen name="search" component={Search} />
