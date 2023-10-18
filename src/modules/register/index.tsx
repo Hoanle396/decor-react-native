@@ -34,110 +34,106 @@ const Register: FCC<{}> = () => {
         source={require('@/assets/logo.png')}
         alt="Logo Image"
       />
-      <View style={styles.form}>
-        <TextInput
-          label="Email"
-          placeholder="Enter your email"
-          onFocus={() => setActive(true)}
-          onBlur={() => setActive(false)}
-          active={active}
-          // error="Email not found"
-          rightIcon={<Entypo name="email" size={18} color={color.primary} />}
-        />
-      </View>
-
-      <View style={styles.form}>
-        <TextInput
-          label="Password"
-          placeholder="Enter your password"
-          secureTextEntry={isPasswordShown}
-          onFocus={() => setActivePassword(true)}
-          onBlur={() => setActivePassword(false)}
-          active={activePassword}
-          // error="Email not found"
-        />
-        <TouchableOpacity
-          onPress={() => setIsPasswordShown(!isPasswordShown)}
-          style={{
-            position: 'absolute',
-            right: 27,
-            marginTop: 25,
-          }}
-        >
-          {isPasswordShown == true ? (
-            <Ionicons name="eye" size={18} color={color.primary} />
-          ) : (
-            <Ionicons name="eye-off" size={18} color={color.primary} />
-          )}
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.form}>
-        <TextInput
-          label="Confirm password"
-          placeholder="Enter your password"
-          secureTextEntry={!isConfirmPasswordShown}
-          onFocus={() => setActiveConfirmPassword(true)}
-          onBlur={() => setActiveConfirmPassword(false)}
-          active={activeConfirmPassword}
-          // error="Email not found"
-        />
-        <TouchableOpacity
-          onPress={() => setIsConfirmPasswordShown(!isConfirmPasswordShown)}
-          style={{
-            position: 'absolute',
-            right: 27,
-            marginTop: 25,
-          }}
-        >
-          {isConfirmPasswordShown == true ? (
-            <Ionicons name="eye" size={18} color={color.primary} />
-          ) : (
-            <Ionicons name="eye-off" size={18} color={color.primary} />
-          )}
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.button}>
-        <Button>Register</Button>
-      </View>
-
-      <View
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginVertical: -30,
-        }}
-      >
-        <View style={styles.under} />
-
-        <Text style={{ fontSize: 14, color: color.grey }}>
-          Or Register with
-        </Text>
-
-        <View style={styles.under} />
-      </View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => console.log('Pressed')}
-          style={styles.imageFGA}
-        >
-          <Image
-            source={require('@/assets/facebookIcon.png')}
-            style={styles.imageFGA}
-            resizeMode="contain"
+      <View style={styles.root}>
+        <View style={styles.form}>
+          <TextInput
+            label="Email"
+            placeholder="Enter your email"
+            onFocus={() => setActive(true)}
+            onBlur={() => setActive(false)}
+            active={active}
+            // error="Email not found"
+            rightIcon={<Entypo name="email" size={18} color={color.primary} />}
           />
-        </TouchableOpacity>
+        </View>
+
+        <View style={styles.form}>
+          <TextInput
+            label="Password"
+            placeholder="Enter your password"
+            secureTextEntry={isPasswordShown}
+            onFocus={() => setActivePassword(true)}
+            onBlur={() => setActivePassword(false)}
+            active={activePassword}
+            rightIcon={
+              <TouchableOpacity
+                onPress={() => setIsPasswordShown(!isPasswordShown)}
+              >
+                {isPasswordShown ? (
+                  <Ionicons name="eye" size={18} color={color.primary} />
+                ) : (
+                  <Ionicons name="eye-off" size={18} color={color.primary} />
+                )}
+              </TouchableOpacity>
+            }
+          />
+        </View>
+        <View style={styles.form}>
+          <TextInput
+            label="Confirm Password"
+            placeholder="Enter your password"
+            secureTextEntry={isConfirmPasswordShown}
+            onFocus={() => setActiveConfirmPassword(true)}
+            onBlur={() => setActiveConfirmPassword(false)}
+            active={activeConfirmPassword}
+            rightIcon={
+              <TouchableOpacity
+                onPress={() =>
+                  setIsConfirmPasswordShown(!isConfirmPasswordShown)
+                }
+              >
+                {isConfirmPasswordShown ? (
+                  <Ionicons name="eye" size={18} color={color.primary} />
+                ) : (
+                  <Ionicons name="eye-off" size={18} color={color.primary} />
+                )}
+              </TouchableOpacity>
+            }
+          />
+        </View>
+        <Button style={styles.button}>Register</Button>
+        <View style={styles.flexRow}>
+          <View style={styles.under} />
+          <Text style={styles.orRegisterWith}>Or Register with</Text>
+          <View style={styles.under} />
+        </View>
+        <View style={[styles.flexRow, { gap: 20 }]}>
+          <TouchableOpacity
+            onPress={() => console.log('Pressed')}
+            style={styles.imageFGA}
+          >
+            <Image
+              source={require('@/assets/facebookIcon.png')}
+              style={styles.imageFGA}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => console.log('Pressed')}
+            style={styles.imageFGA}
+          >
+            <Image
+              source={require('@/assets/googleIcon.png')}
+              style={styles.imageFGA}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => console.log('Pressed')}
+            style={styles.imageFGA}
+          >
+            <Image
+              source={require('@/assets/appleIcon.png')}
+              style={styles.imageFGA}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <Text style={styles.hasAccount}>
         Already have an account?{' '}
-        <Text style={styles.login} onPress={onLogin}>
+        <Text style={styles.register} onPress={onLogin}>
           Login
         </Text>
       </Text>
@@ -154,46 +150,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 58,
   },
+  root: {
+    flex: 1,
+    backgroundColor: color.white,
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: '5%',
+    gap: 28,
+  },
+  checkBox: {
+    flexDirection: 'row',
+    paddingHorizontal: '2%',
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  orRegisterWith: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: color.text.grey,
+  },
+  forGotPassword: {
+    fontSize: 16,
+    color: color.primary,
+    marginLeft: 6,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   button: {
     width: 260,
+  },
+  form: {
+    width: '100%',
   },
   hasAccount: {
     fontSize: 16,
     fontWeight: '400',
     color: color.text.light,
-    marginBottom: 30,
+    bottom: 30,
   },
-  login: {
+  register: {
     fontSize: 16,
     fontWeight: '700',
     color: color.text.dark,
   },
-  form: {
-    paddingHorizontal: 18,
-    width: '100%',
-    marginBottom: -40,
-  },
   image: {
     alignSelf: 'center',
     height: 171,
-    top: 30,
   },
   under: {
     flex: 1,
-    height: 1,
-    backgroundColor: color.grey,
-    marginHorizontal: 10,
+    height: 1.5,
+    backgroundColor: color.text.grey,
+    marginHorizontal: '5%',
   },
   imageFGA: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: color.grey,
-    borderRadius: 10,
-    height: -36,
+    borderRadius: 30,
     width: 36,
-    marginTop: -10,
+    height: 36,
   },
 });
