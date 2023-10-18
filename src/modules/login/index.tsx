@@ -22,6 +22,7 @@ import { useToggle } from '@/hooks/useToggle';
 import { login } from '@/apis/auth/request';
 import { useMutation } from 'react-query';
 import * as SecureStore from 'expo-secure-store';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login: FCC<{}> = () => {
   const [isPasswordShown, setIsPasswordShown] = useToggle(false);
@@ -57,109 +58,115 @@ const Login: FCC<{}> = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('@/assets/logo.png')}
-        alt="Logo Image"
-      />
-      <View style={styles.root}>
-        <View style={styles.form}>
-          <TextInput
-            label="Email"
-            keyboardType="email-address"
-            placeholder="Enter your email"
-            onFocus={setActive}
-            onBlur={setActive}
-            active={active}
-            value={email}
-            onChangeText={setEmail}
-            error={
-              email.match(/^\S+@\S+\.\S+$/) ? '' : email && 'Email invalid'
-            }
-            rightIcon={<Entypo name="email" size={18} color={color.primary} />}
-          />
-        </View>
-
-        <View style={styles.form}>
-          <TextInput
-            label="Password"
-            placeholder="Enter your password"
-            secureTextEntry={isPasswordShown}
-            onFocus={setActivePassword}
-            onBlur={setActivePassword}
-            active={activePassword}
-            value={password}
-            onChangeText={setPassword}
-            error={
-              password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
-                ? ''
-                : password && 'Password minimum 8 characters'
-            }
-            rightIcon={
-              <TouchableOpacity onPress={setIsPasswordShown}>
-                {isPasswordShown ? (
-                  <Ionicons name="eye" size={18} color={color.primary} />
-                ) : (
-                  <Ionicons name="eye-off" size={18} color={color.primary} />
-                )}
-              </TouchableOpacity>
-            }
-          />
-        </View>
-
-        <View style={styles.checkBox}>
-          <View style={styles.flexRow}>
-            <Checkbox
-              value={isChecked}
-              onValueChange={setIsChecked}
-              color={isChecked ? color.primary : undefined}
+    <SafeAreaView style={{ flex: 1, backgroundColor: color.white }}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={[styles.container, { paddingBottom: 0 }]}
+      >
+        <Image
+          style={styles.image}
+          source={require('@/assets/logo.png')}
+          alt="Logo Image"
+        />
+        <View style={styles.root}>
+          <View style={styles.form}>
+            <TextInput
+              label="Email"
+              keyboardType="email-address"
+              placeholder="Enter your email"
+              onFocus={setActive}
+              onBlur={setActive}
+              active={active}
+              value={email}
+              onChangeText={setEmail}
+              error={
+                email.match(/^\S+@\S+\.\S+$/) ? '' : email && 'Email invalid'
+              }
+              rightIcon={
+                <Entypo name="email" size={18} color={color.primary} />
+              }
             />
-            <Text style={{ marginLeft: 5 }}>Remember password</Text>
           </View>
-          <Pressable>
-            <Text style={styles.forGotPassword}>Forgot password?</Text>
-          </Pressable>
-        </View>
-        <Button style={styles.button} onPress={handleLogin}>
-          Login
-        </Button>
-        <View style={styles.flexRow}>
-          <View style={styles.under} />
-          <Text style={styles.orLoginWith}>Or Login with</Text>
-          <View style={styles.under} />
-        </View>
-        <View style={[styles.flexRow, { gap: 20 }]}>
-          <TouchableOpacity style={styles.imageFGA}>
-            <Image
-              source={require('@/assets/facebookIcon.png')}
-              style={styles.imageFGA}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.imageFGA}>
-            <Image
-              source={require('@/assets/googleIcon.png')}
-              style={styles.imageFGA}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.imageFGA}>
-            <Image
-              source={require('@/assets/appleIcon.png')}
-              style={styles.imageFGA}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
 
-      <Text style={styles.hasAccount}>
-        Already have an account?{' '}
-        <Text style={styles.register} onPress={onRegister}>
-          Register
+          <View style={styles.form}>
+            <TextInput
+              label="Password"
+              placeholder="Enter your password"
+              secureTextEntry={isPasswordShown}
+              onFocus={setActivePassword}
+              onBlur={setActivePassword}
+              active={activePassword}
+              value={password}
+              onChangeText={setPassword}
+              error={
+                password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
+                  ? ''
+                  : password && 'Password minimum 8 characters'
+              }
+              rightIcon={
+                <TouchableOpacity onPress={setIsPasswordShown}>
+                  {isPasswordShown ? (
+                    <Ionicons name="eye" size={18} color={color.primary} />
+                  ) : (
+                    <Ionicons name="eye-off" size={18} color={color.primary} />
+                  )}
+                </TouchableOpacity>
+              }
+            />
+          </View>
+
+          <View style={styles.checkBox}>
+            <View style={styles.flexRow}>
+              <Checkbox
+                value={isChecked}
+                onValueChange={setIsChecked}
+                color={isChecked ? color.primary : undefined}
+              />
+              <Text style={{ marginLeft: 5 }}>Remember password</Text>
+            </View>
+            <Pressable>
+              <Text style={styles.forGotPassword}>Forgot password?</Text>
+            </Pressable>
+          </View>
+          <Button style={styles.button} onPress={handleLogin}>
+            Login
+          </Button>
+          <View style={styles.flexRow}>
+            <View style={styles.under} />
+            <Text style={styles.orLoginWith}>Or Login with</Text>
+            <View style={styles.under} />
+          </View>
+          <View style={[styles.flexRow, { gap: 20 }]}>
+            <TouchableOpacity style={styles.imageFGA}>
+              <Image
+                source={require('@/assets/facebookIcon.png')}
+                style={styles.imageFGA}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.imageFGA}>
+              <Image
+                source={require('@/assets/googleIcon.png')}
+                style={styles.imageFGA}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.imageFGA}>
+              <Image
+                source={require('@/assets/appleIcon.png')}
+                style={styles.imageFGA}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Text style={styles.hasAccount}>
+          Already have an account?{' '}
+          <Text style={styles.register} onPress={onRegister}>
+            Register
+          </Text>
         </Text>
-      </Text>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };

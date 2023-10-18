@@ -1,22 +1,22 @@
+import { register } from '@/apis/auth/request';
+import Button from '@/components/Button';
 import TextInput from '@/components/TextField/TextInput';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
-import { Entypo } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import Button from '@/components/Button';
 import { RootStackRoute } from '@/types/navigation';
-import { useNavigation, NavigationProp } from '@react-navigation/native';
+import { Entypo, Ionicons } from '@expo/vector-icons';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
 import {
   Image,
   SafeAreaView,
   StyleSheet,
-  View,
-  TouchableOpacity,
   Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
-import { register } from '@/apis/auth/request';
 
 const Register: FCC<{}> = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -53,129 +53,136 @@ const Register: FCC<{}> = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('@/assets/logo.png')}
-        alt="Logo Image"
-      />
-      <View style={styles.root}>
-        <View style={styles.form}>
-          <TextInput
-            label="Email"
-            placeholder="Enter your email"
-            onFocus={() => setActive(true)}
-            onBlur={() => setActive(false)}
-            active={active}
-            keyboardType="email-address"
-            value={email}
-            onChangeText={setEmail}
-            error={
-              email.match(/^\S+@\S+\.\S+$/) ? '' : email && 'Email invalid'
-            }
-            rightIcon={<Entypo name="email" size={18} color={color.primary} />}
-          />
-        </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: color.white }}>
+      <KeyboardAwareScrollView
+        extraScrollHeight={48}
+        contentContainerStyle={[styles.container, { paddingBottom: 0 }]}
+      >
+        <Image
+          style={styles.image}
+          source={require('@/assets/logo.png')}
+          alt="Logo Image"
+        />
+        <View style={styles.root}>
+          <View style={styles.form}>
+            <TextInput
+              label="Email"
+              placeholder="Enter your email"
+              onFocus={() => setActive(true)}
+              onBlur={() => setActive(false)}
+              active={active}
+              keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
+              error={
+                email.match(/^\S+@\S+\.\S+$/) ? '' : email && 'Email invalid'
+              }
+              rightIcon={
+                <Entypo name="email" size={18} color={color.primary} />
+              }
+            />
+          </View>
 
-        <View style={styles.form}>
-          <TextInput
-            label="Password"
-            placeholder="Enter your password"
-            secureTextEntry={isPasswordShown}
-            onFocus={() => setActivePassword(true)}
-            onBlur={() => setActivePassword(false)}
-            active={activePassword}
-            value={password}
-            onChangeText={setPassword}
-            error={
-              password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
-                ? ''
-                : password && 'Password minimum 8 characters'
-            }
-            rightIcon={
-              <TouchableOpacity
-                onPress={() => setIsPasswordShown(!isPasswordShown)}
-              >
-                {isPasswordShown ? (
-                  <Ionicons name="eye" size={18} color={color.primary} />
-                ) : (
-                  <Ionicons name="eye-off" size={18} color={color.primary} />
-                )}
-              </TouchableOpacity>
-            }
-          />
-        </View>
-        <View style={styles.form}>
-          <TextInput
-            label="Confirm Password"
-            placeholder="Enter your password"
-            secureTextEntry={isConfirmPasswordShown}
-            onFocus={() => setActiveConfirmPassword(true)}
-            onBlur={() => setActiveConfirmPassword(false)}
-            active={activeConfirmPassword}
-            value={passwordConfirm}
-            onChangeText={setPasswordConfirm}
-            error={
-              passwordConfirm.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
-                ? passwordConfirm === password
+          <View style={styles.form}>
+            <TextInput
+              label="Password"
+              placeholder="Enter your password"
+              secureTextEntry={isPasswordShown}
+              onFocus={() => setActivePassword(true)}
+              onBlur={() => setActivePassword(false)}
+              active={activePassword}
+              value={password}
+              onChangeText={setPassword}
+              error={
+                password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
                   ? ''
-                  : 'Password confirm does not match'
-                : 'Password minimum 8 characters'
-            }
-            rightIcon={
-              <TouchableOpacity
-                onPress={() =>
-                  setIsConfirmPasswordShown(!isConfirmPasswordShown)
-                }
-              >
-                {isConfirmPasswordShown ? (
-                  <Ionicons name="eye" size={18} color={color.primary} />
-                ) : (
-                  <Ionicons name="eye-off" size={18} color={color.primary} />
-                )}
-              </TouchableOpacity>
-            }
-          />
-        </View>
-        <Button style={styles.button} onPress={handleRegister}>
-          Register
-        </Button>
-        <View style={styles.flexRow}>
-          <View style={styles.under} />
-          <Text style={styles.orRegisterWith}>Or Register with</Text>
-          <View style={styles.under} />
-        </View>
-        <View style={[styles.flexRow, { gap: 20 }]}>
-          <TouchableOpacity style={styles.imageFGA}>
-            <Image
-              source={require('@/assets/facebookIcon.png')}
-              style={styles.imageFGA}
-              resizeMode="contain"
+                  : password && 'Password minimum 8 characters'
+              }
+              rightIcon={
+                <TouchableOpacity
+                  onPress={() => setIsPasswordShown(!isPasswordShown)}
+                >
+                  {isPasswordShown ? (
+                    <Ionicons name="eye" size={18} color={color.primary} />
+                  ) : (
+                    <Ionicons name="eye-off" size={18} color={color.primary} />
+                  )}
+                </TouchableOpacity>
+              }
             />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.imageFGA}>
-            <Image
-              source={require('@/assets/googleIcon.png')}
-              style={styles.imageFGA}
-              resizeMode="contain"
+          </View>
+          <View style={styles.form}>
+            <TextInput
+              label="Confirm Password"
+              placeholder="Enter your password"
+              secureTextEntry={isConfirmPasswordShown}
+              onFocus={() => setActiveConfirmPassword(true)}
+              onBlur={() => setActiveConfirmPassword(false)}
+              active={activeConfirmPassword}
+              value={passwordConfirm}
+              onChangeText={setPasswordConfirm}
+              error={
+                passwordConfirm.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
+                  ? passwordConfirm === password
+                    ? ''
+                    : 'Password confirm does not match'
+                  : 'Password minimum 8 characters'
+              }
+              rightIcon={
+                <TouchableOpacity
+                  onPress={() =>
+                    setIsConfirmPasswordShown(!isConfirmPasswordShown)
+                  }
+                >
+                  {isConfirmPasswordShown ? (
+                    <Ionicons name="eye" size={18} color={color.primary} />
+                  ) : (
+                    <Ionicons name="eye-off" size={18} color={color.primary} />
+                  )}
+                </TouchableOpacity>
+              }
             />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.imageFGA}>
-            <Image
-              source={require('@/assets/appleIcon.png')}
-              style={styles.imageFGA}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
+          </View>
+          <Button style={styles.button} onPress={handleRegister}>
+            Register
+          </Button>
+          <View style={styles.flexRow}>
+            <View style={styles.under} />
+            <Text style={styles.orRegisterWith}>Or Register with</Text>
+            <View style={styles.under} />
+          </View>
+          <View style={[styles.flexRow, { gap: 20 }]}>
+            <TouchableOpacity style={styles.imageFGA}>
+              <Image
+                source={require('@/assets/facebookIcon.png')}
+                style={styles.imageFGA}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.imageFGA}>
+              <Image
+                source={require('@/assets/googleIcon.png')}
+                style={styles.imageFGA}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.imageFGA}>
+              <Image
+                source={require('@/assets/appleIcon.png')}
+                style={styles.imageFGA}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
-      <Text style={styles.hasAccount}>
-        Already have an account?{' '}
-        <Text style={styles.register} onPress={onLogin}>
-          Login
+        <Text style={styles.hasAccount}>
+          Already have an account?{' '}
+          <Text style={styles.register} onPress={onLogin}>
+            Login
+          </Text>
         </Text>
-      </Text>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
