@@ -18,16 +18,44 @@ import {
   Text,
   Pressable,
 } from 'react-native';
+import { useToggle } from '@/hooks/useToggle';
+import { login } from '@/apis/auth/request';
+import { useMutation } from 'react-query';
+import * as SecureStore from 'expo-secure-store';
 
 const Login: FCC<{}> = () => {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [active, setActive] = useState(false);
-  const [activePassword, setActivePassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
+  const [isPasswordShown, setIsPasswordShown] = useToggle(false);
+  const [active, setActive] = useToggle(false);
+  const [activePassword, setActivePassword] = useToggle(false);
+  const [isChecked, setIsChecked] = useToggle(false);
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const navigation = useNavigation<NavigationProp<RootStackRoute, 'login'>>();
+
+  const { mutate } = useMutation(login, {
+    onSuccess: async data => {
+      await SecureStore.setItemAsync('access_token', data.access_token);
+      await SecureStore.setItemAsync('refresh_token', data.refresh_token);
+      navigation.navigate('home');
+    },
+  });
+
+  const handleLogin = () => {
+    if (
+      !password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/) ||
+      !email.match(/^\S+@\S+\.\S+$/)
+    ) {
+      return;
+    }
+    mutate({ username: email.toLowerCase(), password });
+  };
+
   const onRegister = () => {
     navigation.navigate('register');
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -39,11 +67,16 @@ const Login: FCC<{}> = () => {
         <View style={styles.form}>
           <TextInput
             label="Email"
+            keyboardType="email-address"
             placeholder="Enter your email"
-            onFocus={() => setActive(true)}
-            onBlur={() => setActive(false)}
+            onFocus={setActive}
+            onBlur={setActive}
             active={active}
-            // error="Email not found"
+            value={email}
+            onChangeText={setEmail}
+            error={
+              email.match(/^\S+@\S+\.\S+$/) ? '' : email && 'Email invalid'
+            }
             rightIcon={<Entypo name="email" size={18} color={color.primary} />}
           />
         </View>
@@ -53,13 +86,18 @@ const Login: FCC<{}> = () => {
             label="Password"
             placeholder="Enter your password"
             secureTextEntry={isPasswordShown}
-            onFocus={() => setActivePassword(true)}
-            onBlur={() => setActivePassword(false)}
+            onFocus={setActivePassword}
+            onBlur={setActivePassword}
             active={activePassword}
+            value={password}
+            onChangeText={setPassword}
+            error={
+              password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
+                ? ''
+                : password && 'Password minimum 8 characters'
+            }
             rightIcon={
-              <TouchableOpacity
-                onPress={() => setIsPasswordShown(!isPasswordShown)}
-              >
+              <TouchableOpacity onPress={setIsPasswordShown}>
                 {isPasswordShown ? (
                   <Ionicons name="eye" size={18} color={color.primary} />
                 ) : (
@@ -83,37 +121,30 @@ const Login: FCC<{}> = () => {
             <Text style={styles.forGotPassword}>Forgot password?</Text>
           </Pressable>
         </View>
-        <Button style={styles.button}>Login</Button>
+        <Button style={styles.button} onPress={handleLogin}>
+          Login
+        </Button>
         <View style={styles.flexRow}>
           <View style={styles.under} />
           <Text style={styles.orLoginWith}>Or Login with</Text>
           <View style={styles.under} />
         </View>
         <View style={[styles.flexRow, { gap: 20 }]}>
-          <TouchableOpacity
-            onPress={() => console.log('Pressed')}
-            style={styles.imageFGA}
-          >
+          <TouchableOpacity style={styles.imageFGA}>
             <Image
               source={require('@/assets/facebookIcon.png')}
               style={styles.imageFGA}
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => console.log('Pressed')}
-            style={styles.imageFGA}
-          >
+          <TouchableOpacity style={styles.imageFGA}>
             <Image
               source={require('@/assets/googleIcon.png')}
               style={styles.imageFGA}
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => console.log('Pressed')}
-            style={styles.imageFGA}
-          >
+          <TouchableOpacity style={styles.imageFGA}>
             <Image
               source={require('@/assets/appleIcon.png')}
               style={styles.imageFGA}

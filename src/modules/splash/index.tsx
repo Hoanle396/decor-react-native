@@ -1,22 +1,37 @@
+import { useUser } from '@/apis/auth/queries';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
 import { RootStackRoute } from '@/types/navigation';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import { Animated, Image, StyleSheet, View } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 type Props = {};
 
 const Splash: FCC<Props> = ({}) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation<NavigationProp<RootStackRoute, 'splash'>>();
+  const { refetch } = useUser({
+    onSuccess: () => {
+      navigation.navigate('home');
+    },
+    onError: async () => {
+      await SecureStore.deleteItemAsync('access_token');
+      await SecureStore.deleteItemAsync('refresh_token');
+
+      navigation.navigate('welcome');
+    },
+    enabled: false,
+  });
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 3000,
       useNativeDriver: true,
     }).start();
-    setTimeout(() => navigation.navigate('welcome'), 3000);
-  }, [fadeAnim, navigation]);
+    const timeout = setTimeout(() => refetch(), 2500);
+    return () => clearTimeout(timeout);
+  }, [fadeAnim, navigation, refetch]);
 
   return (
     <View style={styles.root}>

@@ -15,6 +15,8 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
+import { useMutation } from 'react-query';
+import { register } from '@/apis/auth/request';
 
 const Register: FCC<{}> = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(false);
@@ -22,11 +24,34 @@ const Register: FCC<{}> = () => {
   const [active, setActive] = useState(false);
   const [activePassword, setActivePassword] = useState(false);
   const [activeConfirmPassword, setActiveConfirmPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+
   const navigation =
     useNavigation<NavigationProp<RootStackRoute, 'register'>>();
+
+  const { mutate } = useMutation(register, {
+    onSuccess: () => {
+      navigation.navigate('login');
+    },
+  });
+
+  const handleRegister = () => {
+    if (
+      !password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/) ||
+      !email.match(/^\S+@\S+\.\S+$/) ||
+      passwordConfirm !== password
+    ) {
+      return;
+    }
+    mutate({ fullname: email, email: email.toLowerCase(), password });
+  };
+
   const onLogin = () => {
     navigation.navigate('login');
   };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -42,7 +67,12 @@ const Register: FCC<{}> = () => {
             onFocus={() => setActive(true)}
             onBlur={() => setActive(false)}
             active={active}
-            // error="Email not found"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={setEmail}
+            error={
+              email.match(/^\S+@\S+\.\S+$/) ? '' : email && 'Email invalid'
+            }
             rightIcon={<Entypo name="email" size={18} color={color.primary} />}
           />
         </View>
@@ -55,6 +85,13 @@ const Register: FCC<{}> = () => {
             onFocus={() => setActivePassword(true)}
             onBlur={() => setActivePassword(false)}
             active={activePassword}
+            value={password}
+            onChangeText={setPassword}
+            error={
+              password.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
+                ? ''
+                : password && 'Password minimum 8 characters'
+            }
             rightIcon={
               <TouchableOpacity
                 onPress={() => setIsPasswordShown(!isPasswordShown)}
@@ -76,6 +113,15 @@ const Register: FCC<{}> = () => {
             onFocus={() => setActiveConfirmPassword(true)}
             onBlur={() => setActiveConfirmPassword(false)}
             active={activeConfirmPassword}
+            value={passwordConfirm}
+            onChangeText={setPasswordConfirm}
+            error={
+              passwordConfirm.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
+                ? passwordConfirm === password
+                  ? ''
+                  : 'Password confirm does not match'
+                : 'Password minimum 8 characters'
+            }
             rightIcon={
               <TouchableOpacity
                 onPress={() =>
@@ -91,37 +137,30 @@ const Register: FCC<{}> = () => {
             }
           />
         </View>
-        <Button style={styles.button}>Register</Button>
+        <Button style={styles.button} onPress={handleRegister}>
+          Register
+        </Button>
         <View style={styles.flexRow}>
           <View style={styles.under} />
           <Text style={styles.orRegisterWith}>Or Register with</Text>
           <View style={styles.under} />
         </View>
         <View style={[styles.flexRow, { gap: 20 }]}>
-          <TouchableOpacity
-            onPress={() => console.log('Pressed')}
-            style={styles.imageFGA}
-          >
+          <TouchableOpacity style={styles.imageFGA}>
             <Image
               source={require('@/assets/facebookIcon.png')}
               style={styles.imageFGA}
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => console.log('Pressed')}
-            style={styles.imageFGA}
-          >
+          <TouchableOpacity style={styles.imageFGA}>
             <Image
               source={require('@/assets/googleIcon.png')}
               style={styles.imageFGA}
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => console.log('Pressed')}
-            style={styles.imageFGA}
-          >
+          <TouchableOpacity style={styles.imageFGA}>
             <Image
               source={require('@/assets/appleIcon.png')}
               style={styles.imageFGA}
