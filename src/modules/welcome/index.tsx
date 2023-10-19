@@ -95,12 +95,12 @@ const Welcome: FCC<{}> = () => {
         </View>
       </View>
       <Button style={styles.button} onPress={onRegister}>
-        Đăng ký
+        Register
       </Button>
       <Text style={styles.hasAccount}>
-        Đã có tài khoản?{' '}
+        Already have an account?{' '}
         <Text style={styles.login} onPress={onLogin}>
-          Đăng nhập
+          Login
         </Text>
       </Text>
     </SafeAreaView>

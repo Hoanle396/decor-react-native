@@ -2,10 +2,9 @@ import { color } from '@/constants/color';
 import { FCC } from '@/types';
 import React from 'react';
 
-import Header from '@/components/Header/Header';
 import Category from '@/components/category/category';
-import { Image, SafeAreaView, StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Image, SafeAreaView, StyleSheet, Text } from 'react-native';
 
 const Product: FCC<{}> = () => {
   const navigation = useNavigation<any>();
@@ -13,21 +12,18 @@ const Product: FCC<{}> = () => {
     navigation.navigate('categoryPost', name);
   };
   return (
-    <>
-      <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
-      <SafeAreaView style={styles.container}>
-        <Image
-          style={styles.image}
-          source={require('@/assets/logo.png')}
-          alt="Logo Image"
-        />
-        <Text style={styles.list}>Danh mục sản phẩm</Text>
-        <Category onClick={() => onRoute('den')} />
-        <Category onClick={() => onRoute('den')} />
-        <Category onClick={() => onRoute('den')} />
-        <Category onClick={() => onRoute('den')} />
-      </SafeAreaView>
-    </>
+    <SafeAreaView style={styles.container}>
+      <Image
+        style={styles.image}
+        source={require('@/assets/logo.png')}
+        alt="Logo Image"
+      />
+      <Text style={styles.list}>Category</Text>
+      <Category onClick={() => onRoute('den')} />
+      <Category onClick={() => onRoute('den')} />
+      <Category onClick={() => onRoute('den')} />
+      <Category onClick={() => onRoute('den')} />
+    </SafeAreaView>
   );
 };
 

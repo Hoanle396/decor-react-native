@@ -41,11 +41,11 @@ const Search: FCC<{}> = () => {
           </View>
           <View style={styles.body}>
             <View style={styles.text2}>
-              <Text style={styles.lastInput}>Tìm kiếm lần cuối</Text>
-              <Text style={styles.deleteAll}>xóa tất cả</Text>
+              <Text style={styles.lastInput}>History</Text>
+              <Text style={styles.deleteAll}>delete all</Text>
             </View>
-            <Text style={styles.result}>Đèn thả quả bồ công anh</Text>
-            <Text style={styles.result}>Thảm lông trải sàn</Text>
+            <Text style={styles.result}>{'Đèn thả quả bồ công anh'}</Text>
+            <Text style={styles.result}>{'Thảm lông trải sàn'}</Text>
           </View>
         </View>
       </SafeAreaView>

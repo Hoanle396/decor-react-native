@@ -21,19 +21,19 @@ const PostCategory: FCC<{}> = () => {
         source={require('@/assets/logo.png')}
         alt="Logo Image"
       />
-      <Text style={styles.text2}>Tranh treo tường</Text>
+      <Text style={styles.text2}>{'Tranh treo tường'}</Text>
       <View style={styles.body}>
         <MaterialIcons name="filter-list" size={24} color="black" />
         <View style={styles.filter}>
-          <Text style={styles.text}>Khoảng Giá</Text>
+          <Text style={styles.text}>Category</Text>
           <AntDesign name="down" size={16} color="black" />
         </View>
         <View style={styles.filter}>
-          <Text style={styles.text}>Thời Gian</Text>
+          <Text style={styles.text}>Date time</Text>
           <AntDesign name="down" size={16} color="black" />
         </View>
         <View style={styles.filter}>
-          <Text style={styles.text}>cỡ</Text>
+          <Text style={styles.text}>zise</Text>
           <AntDesign name="down" size={16} color="black" />
         </View>
         <Feather name="filter" size={24} color="black" />
