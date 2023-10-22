@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import CategoryNavigation from './Category';
+import Home from '@/modules/home';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,7 +22,7 @@ const BottomTab = () => {
     >
       <Tab.Screen
         name="Dashboard"
-        component={Splash}
+        component={Home}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.iconTop}>

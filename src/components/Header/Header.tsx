@@ -19,6 +19,7 @@ export interface HeaderProps extends HeaderOptions {
   title?: string | JSX.Element;
   subTitle?: string;
   headerTitleAlign?: 'left' | 'center';
+  height?: number;
 }
 const Header = React.memo(function Header({
   leftBtnVariant,
@@ -26,6 +27,7 @@ const Header = React.memo(function Header({
   onPressLeftButton,
   onPressRightButton,
   title,
+  height,
   headerTitleAlign = 'center',
   ...props
 }: HeaderProps) {
@@ -58,7 +60,7 @@ const Header = React.memo(function Header({
   if (!headerRight && onPressRightButton && rightBtnVariant === 'search') {
     headerRight = () => (
       <TouchableOpacity onPress={onPressRightButton}>
-        <Icon name="search" size={24} fill={elementColor} />
+        <Icon name="search" size={29} color={elementColor} />
       </TouchableOpacity>
     );
   }
@@ -89,6 +91,7 @@ const Header = React.memo(function Header({
       headerRightContainerStyle={styles.headerRightContainer}
       headerStyle={{
         backgroundColor,
+        height,
       }}
       headerTitleAlign={headerTitleAlign}
       {...props}
@@ -113,11 +116,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   headerLeftContainer: {
-    paddingLeft: 12,
+    paddingLeft: '5%',
     justifyContent: 'center',
   },
   headerRightContainer: {
-    paddingRight: 12,
+    paddingRight: '5%',
     justifyContent: 'center',
   },
 });

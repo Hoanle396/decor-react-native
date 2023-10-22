@@ -122,11 +122,12 @@ const Register: FCC<{}> = () => {
               value={passwordConfirm}
               onChangeText={setPasswordConfirm}
               error={
-                passwordConfirm.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
-                  ? passwordConfirm === password
-                    ? ''
-                    : 'Password confirm does not match'
-                  : 'Password minimum 8 characters'
+                !passwordConfirm.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/) &&
+                passwordConfirm
+                  ? 'Password minimum 8 characters'
+                  : passwordConfirm && passwordConfirm !== password
+                  ? 'Password confirm does not match'
+                  : ''
               }
               rightIcon={
                 <TouchableOpacity
