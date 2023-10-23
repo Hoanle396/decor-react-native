@@ -19,8 +19,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useMutation } from 'react-query';
 
 const Register: FCC<{}> = () => {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false);
+  const [isPasswordShown, setIsPasswordShown] = useState(true);
+  const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(true);
   const [active, setActive] = useState(false);
   const [activePassword, setActivePassword] = useState(false);
   const [activeConfirmPassword, setActiveConfirmPassword] = useState(false);

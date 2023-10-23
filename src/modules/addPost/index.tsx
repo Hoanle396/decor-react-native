@@ -1,4 +1,5 @@
 import Header from '@/components/Header/Header';
+import ImageInput from '@/components/ImageField';
 import SelectInput from '@/components/SelectField';
 import TextInput from '@/components/TextField/TextInput';
 import { color } from '@/constants/color';
@@ -16,6 +17,7 @@ const AddPost: FCC<Props> = () => {
   const [activeName, onToggleActiveName] = useToggle();
 
   const [category, setCategory] = useState('');
+
   return (
     <>
       <Header
@@ -72,7 +74,11 @@ const AddPost: FCC<Props> = () => {
                 numberOfLines={5}
               />
             </View>
+            <View style={styles.form}>
+              <ImageInput label="Images" placeholder="Choose your images" />
+            </View>
           </View>
+          <View style={{ height: 120 }} />
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </>
