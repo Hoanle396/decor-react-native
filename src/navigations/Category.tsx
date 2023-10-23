@@ -1,3 +1,4 @@
+import AddPost from '@/modules/addPost';
 import Product from '@/modules/catetory';
 import PostCategory from '@/modules/postCategory';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -19,4 +20,21 @@ function CategoryNavigation(): JSX.Element {
   );
 }
 
-export default CategoryNavigation;
+const AddPostNavigation = () => {
+  const Stack = createNativeStackNavigator<any>();
+
+  return (
+    <Stack.Navigator
+      initialRouteName="new"
+      screenOptions={{
+        header: () => null,
+        animation: 'fade',
+      }}
+    >
+      <Stack.Screen name="new" component={AddPost} />
+      <Stack.Screen name="success" component={PostCategory} />
+    </Stack.Navigator>
+  );
+};
+
+export { AddPostNavigation, CategoryNavigation };

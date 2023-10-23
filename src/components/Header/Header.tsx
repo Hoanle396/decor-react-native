@@ -8,10 +8,11 @@ import {
 } from '@react-navigation/elements';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Button from '../Button';
 
 export interface HeaderProps extends HeaderOptions {
   leftBtnVariant?: 'back' | 'notification';
-  rightBtnVariant?: 'search';
+  rightBtnVariant?: 'search' | 'post';
   onPressLeftButton?: () => void;
   onPressRightButton?: () => void;
   modal?: boolean;
@@ -62,6 +63,19 @@ const Header = React.memo(function Header({
       <TouchableOpacity onPress={onPressRightButton}>
         <Icon name="search" size={29} color={elementColor} />
       </TouchableOpacity>
+    );
+  }
+
+  if (!headerRight && onPressRightButton && rightBtnVariant === 'post') {
+    headerRight = () => (
+      <Button
+        onPress={onPressRightButton}
+        variants="text"
+        style={{ padding: 0 }}
+        textStyle={{ fontSize: 13, flexDirection: 'row' }}
+      >
+        Publish <Icon name="push-outline" size={12} color={elementColor} />
+      </Button>
     );
   }
 
