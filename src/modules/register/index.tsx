@@ -19,8 +19,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useMutation } from 'react-query';
 
 const Register: FCC<{}> = () => {
-  const [isPasswordShown, setIsPasswordShown] = useState(false);
-  const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false);
+  const [isPasswordShown, setIsPasswordShown] = useState(true);
+  const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(true);
   const [active, setActive] = useState(false);
   const [activePassword, setActivePassword] = useState(false);
   const [activeConfirmPassword, setActiveConfirmPassword] = useState(false);
@@ -122,11 +122,12 @@ const Register: FCC<{}> = () => {
               value={passwordConfirm}
               onChangeText={setPasswordConfirm}
               error={
-                passwordConfirm.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/)
-                  ? passwordConfirm === password
-                    ? ''
-                    : 'Password confirm does not match'
-                  : 'Password minimum 8 characters'
+                !passwordConfirm.match(/^(?=.*[A-Za-z\d])[A-Za-z\d]{8,}$/) &&
+                passwordConfirm
+                  ? 'Password minimum 8 characters'
+                  : passwordConfirm && passwordConfirm !== password
+                  ? 'Password confirm does not match'
+                  : ''
               }
               rightIcon={
                 <TouchableOpacity

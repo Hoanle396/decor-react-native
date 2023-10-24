@@ -1,6 +1,6 @@
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
-import React from 'react';
+import React, { memo, useState } from 'react';
 import {
   TextInputProps,
   TextInput as RNTextInput,
@@ -24,6 +24,7 @@ const TextInput: FCC<Props> = ({
   rightIcon,
   ...props
 }) => {
+  const [height, setHeight] = useState(24);
   return (
     <View>
       <View
@@ -31,6 +32,7 @@ const TextInput: FCC<Props> = ({
           styles.container,
           active && styles.active,
           !!error && styles.error,
+          { height: height + 36 },
         ]}
       >
         {!!label && (
@@ -44,7 +46,13 @@ const TextInput: FCC<Props> = ({
             {label}
           </Text>
         )}
-        <RNTextInput {...props} style={[style, styles.input]} />
+        <RNTextInput
+          onContentSizeChange={e =>
+            setHeight(e.nativeEvent.contentSize.height || 24)
+          }
+          {...props}
+          style={[style, styles.input, { height: height }]}
+        />
         {!!rightIcon && <View style={styles.rightIcon}>{rightIcon}</View>}
       </View>
       {!!error && <Text style={styles.labelError}>! {error}</Text>}
@@ -52,7 +60,7 @@ const TextInput: FCC<Props> = ({
   );
 };
 
-export default TextInput;
+export default memo(TextInput);
 
 const styles = StyleSheet.create({
   container: {
@@ -60,7 +68,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: color.background.secondary,
     width: '100%',
-    height: 56,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderWidth: 1.5,
@@ -77,7 +84,6 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 16,
-    height: 24,
     color: color.text.main,
   },
   labelActive: {

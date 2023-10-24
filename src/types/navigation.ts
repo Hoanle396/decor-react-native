@@ -9,3 +9,9 @@ export type RootStackRoute = {
   products: undefined;
   detailRooms: undefined;
 };
+export type TabRoute = {
+  Dashboard: undefined;
+  History: undefined;
+  Create: undefined;
+  About: undefined;
+};

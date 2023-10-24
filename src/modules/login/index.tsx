@@ -25,7 +25,7 @@ import * as SecureStore from 'expo-secure-store';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const Login: FCC<{}> = () => {
-  const [isPasswordShown, setIsPasswordShown] = useToggle(false);
+  const [isPasswordShown, setIsPasswordShown] = useToggle(true);
   const [active, setActive] = useToggle(false);
   const [activePassword, setActivePassword] = useToggle(false);
   const [isChecked, setIsChecked] = useToggle(false);

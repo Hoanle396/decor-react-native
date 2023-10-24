@@ -8,10 +8,11 @@ import {
 } from '@react-navigation/elements';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Button from '../Button';
 
 export interface HeaderProps extends HeaderOptions {
   leftBtnVariant?: 'back' | 'notification';
-  rightBtnVariant?: 'search';
+  rightBtnVariant?: 'search' | 'post';
   onPressLeftButton?: () => void;
   onPressRightButton?: () => void;
   modal?: boolean;
@@ -19,6 +20,7 @@ export interface HeaderProps extends HeaderOptions {
   title?: string | JSX.Element;
   subTitle?: string;
   headerTitleAlign?: 'left' | 'center';
+  height?: number;
 }
 const Header = React.memo(function Header({
   leftBtnVariant,
@@ -26,6 +28,7 @@ const Header = React.memo(function Header({
   onPressLeftButton,
   onPressRightButton,
   title,
+  height,
   headerTitleAlign = 'center',
   ...props
 }: HeaderProps) {
@@ -58,8 +61,21 @@ const Header = React.memo(function Header({
   if (!headerRight && onPressRightButton && rightBtnVariant === 'search') {
     headerRight = () => (
       <TouchableOpacity onPress={onPressRightButton}>
-        <Icon name="search" size={24} fill={elementColor} />
+        <Icon name="search" size={29} color={elementColor} />
       </TouchableOpacity>
+    );
+  }
+
+  if (!headerRight && onPressRightButton && rightBtnVariant === 'post') {
+    headerRight = () => (
+      <Button
+        onPress={onPressRightButton}
+        variants="text"
+        style={{ padding: 0 }}
+        textStyle={{ fontSize: 17, flexDirection: 'row' }}
+      >
+        Publish <Icon name="push-outline" size={16} color={elementColor} />
+      </Button>
     );
   }
 
@@ -89,6 +105,7 @@ const Header = React.memo(function Header({
       headerRightContainerStyle={styles.headerRightContainer}
       headerStyle={{
         backgroundColor,
+        height,
       }}
       headerTitleAlign={headerTitleAlign}
       {...props}
@@ -113,11 +130,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   headerLeftContainer: {
-    paddingLeft: 12,
+    paddingLeft: '5%',
     justifyContent: 'center',
   },
   headerRightContainer: {
-    paddingRight: 12,
+    paddingRight: '5%',
     justifyContent: 'center',
   },
 });

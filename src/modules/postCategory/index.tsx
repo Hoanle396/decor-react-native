@@ -3,7 +3,9 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import SelectDropdown from 'react-native-select-dropdown';
 import {
   Image,
   SafeAreaView,
@@ -12,8 +14,15 @@ import {
   Text,
   ScrollView,
 } from 'react-native';
+import Product from '@/components/Production';
 
 const PostCategory: FCC<{}> = () => {
+  const time = ['Jan-2', 'Feb-3', 'Mar-3', 'Apr-7', 'May-3'];
+  const [_, setSelectedValue] = useState(null);
+  const navigation = useNavigation<any>();
+  const onRoute = (name: string) => {
+    navigation.navigate('categoryPost', name);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -24,28 +33,59 @@ const PostCategory: FCC<{}> = () => {
       <Text style={styles.text2}>{'Tranh treo tường'}</Text>
       <View style={styles.body}>
         <MaterialIcons name="filter-list" size={24} color="black" />
-        <View style={styles.filter}>
-          <Text style={styles.text}>Category</Text>
-          <AntDesign name="down" size={16} color="black" />
-        </View>
-        <View style={styles.filter}>
-          <Text style={styles.text}>Date time</Text>
-          <AntDesign name="down" size={16} color="black" />
-        </View>
-        <View style={styles.filter}>
-          <Text style={styles.text}>zise</Text>
-          <AntDesign name="down" size={16} color="black" />
-        </View>
+        <SelectDropdown
+          data={time}
+          onSelect={(selectedItem, _) => {
+            setSelectedValue(selectedItem);
+          }}
+          defaultButtonText="Category"
+          buttonStyle={{
+            backgroundColor: color.white,
+            height: 20,
+            width: 90,
+            paddingHorizontal: 0,
+          }}
+          buttonTextStyle={{
+            color: color.primary,
+            fontSize: 13,
+            fontWeight: '700',
+          }}
+          renderDropdownIcon={() => (
+            <AntDesign name="down" size={16} color="black" />
+          )}
+        />
+
+        <SelectDropdown
+          data={time}
+          onSelect={(selectedItem, _) => {
+            setSelectedValue(selectedItem);
+          }}
+          defaultButtonText="Date time"
+          buttonStyle={{
+            backgroundColor: color.white,
+            height: 20,
+            width: 90,
+            paddingHorizontal: 0,
+          }}
+          buttonTextStyle={{
+            color: color.primary,
+            fontSize: 13,
+            fontWeight: '700',
+          }}
+          renderDropdownIcon={() => (
+            <AntDesign name="down" size={16} color="black" />
+          )}
+        />
         <Feather name="filter" size={24} color="black" />
       </View>
-      <ScrollView>
-        <View>
-          <Image
-            style={styles.imageProduction}
-            source={require('@/assets/product.png')}
-            alt="prodution"
-          />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.product}>
+          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
+          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
+          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
+          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
         </View>
+        <View style={{ height: 120 }} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -74,8 +114,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 5,
+    gap: 10,
   },
   text2: {
     fontSize: 30,
@@ -86,14 +125,18 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: color.text.grey,
   },
-  imageProduction: {
-    width: 156,
-    height: 198,
-    justifyContent: 'flex-start',
-  },
+
   filter: {
     flexDirection: 'row',
     gap: 3,
     alignContent: 'center',
+  },
+  product: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 5,
+    rowGap: 25,
+    flexWrap: 'wrap',
+    paddingHorizontal: '7%',
   },
 });
