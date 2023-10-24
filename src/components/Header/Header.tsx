@@ -72,9 +72,9 @@ const Header = React.memo(function Header({
         onPress={onPressRightButton}
         variants="text"
         style={{ padding: 0 }}
-        textStyle={{ fontSize: 13, flexDirection: 'row' }}
+        textStyle={{ fontSize: 17, flexDirection: 'row' }}
       >
-        Publish <Icon name="push-outline" size={12} color={elementColor} />
+        Publish <Icon name="push-outline" size={16} color={elementColor} />
       </Button>
     );
   }

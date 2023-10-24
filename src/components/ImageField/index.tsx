@@ -3,7 +3,7 @@ import { FCC } from '@/types';
 import { ImageTypes } from '@/types/utils';
 import { Ionicons } from '@expo/vector-icons';
 import { MediaTypeOptions, launchImageLibraryAsync } from 'expo-image-picker';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   Image,
   TextInput as RNTextInput,
@@ -20,6 +20,8 @@ type Props = TextInputProps & {
   rightIcon?: JSX.Element;
   active?: boolean;
   error?: string;
+  onValueChange?: (value: ImageTypes[]) => void;
+  imageList: ImageTypes[];
 };
 
 const ImageInput: FCC<Props> = ({
@@ -28,6 +30,8 @@ const ImageInput: FCC<Props> = ({
   active = false,
   error,
   rightIcon,
+  onValueChange,
+  imageList,
   ...props
 }) => {
   const [photo, setPhoto] = React.useState<ImageTypes[]>([]);
@@ -39,6 +43,7 @@ const ImageInput: FCC<Props> = ({
         mediaTypes: MediaTypeOptions.Images,
         allowsMultipleSelection: true,
         quality: 1,
+        selectionLimit: 5,
       });
       if (!res.canceled) {
         setPhoto(res.assets as ImageTypes[]);
@@ -47,6 +52,15 @@ const ImageInput: FCC<Props> = ({
       throw e;
     }
   };
+
+  useEffect(() => {
+    onValueChange && onValueChange(photo);
+  }, [onValueChange, photo]);
+
+  useEffect(() => {
+    imageList && setPhoto(imageList);
+  }, [setPhoto, imageList]);
+
   return (
     <View>
       <View
@@ -78,7 +92,11 @@ const ImageInput: FCC<Props> = ({
             }}
           >
             {photo.map(({ uri }) => (
-              <Image source={{ uri: uri }} style={styles.imagePreview} />
+              <Image
+                key={uri}
+                source={{ uri: uri }}
+                style={styles.imagePreview}
+              />
             ))}
             <TouchableOpacity
               onPress={() => setPhoto([])}
