@@ -34,7 +34,7 @@ const ImageInput: FCC<Props> = ({
   imageList,
   ...props
 }) => {
-  const [photo, setPhoto] = React.useState<ImageTypes[]>([]);
+  const [photo, setPhoto] = React.useState<ImageTypes[]>(imageList);
   const height = useMemo(() => (photo.length > 0 ? 150 : 24), [photo]);
 
   const handleChoosePhoto = async () => {
@@ -56,10 +56,6 @@ const ImageInput: FCC<Props> = ({
   useEffect(() => {
     onValueChange && onValueChange(photo);
   }, [onValueChange, photo]);
-
-  useEffect(() => {
-    imageList && setPhoto(imageList);
-  }, [setPhoto, imageList]);
 
   return (
     <View>
