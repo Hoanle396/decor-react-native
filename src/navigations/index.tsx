@@ -1,12 +1,12 @@
 import { color } from '@/constants/color';
 import Home from '@/modules/home';
 import Search from '@/modules/search';
-import Splash from '@/modules/splash';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { AddPostNavigation, CategoryNavigation } from './Category';
+import Profile from '@/modules/profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -86,7 +86,7 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name="About"
-        component={Splash}
+        component={Profile}
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.iconTop}>
