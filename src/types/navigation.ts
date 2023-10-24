@@ -7,6 +7,7 @@ export type RootStackRoute = {
   alldone: undefined;
   search: undefined;
   products: undefined;
+  detailRooms: undefined;
 };
 export type TabRoute = {
   Dashboard: undefined;

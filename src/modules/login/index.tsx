@@ -121,7 +121,7 @@ const Login: FCC<{}> = () => {
                 onValueChange={setIsChecked}
                 color={isChecked ? color.primary : undefined}
               />
-              <Text style={{ marginLeft: 5 }}>Remember password</Text>
+              <Text style={{ marginLeft: 5}}>Remember password</Text>
             </View>
             <Pressable>
               <Text style={styles.forGotPassword}>Forgot password?</Text>
