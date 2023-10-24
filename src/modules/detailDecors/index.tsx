@@ -1,39 +1,32 @@
-// import { Ionicons } from '@expo/vector-icons';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
-import React, { useRef } from 'react';
-import InputScrollView from 'react-native-input-scroll-view';
-// import { useToggle } from '@/hooks/useToggle';
-// import { RootStackRoute } from '@/types/navigation';
-import {
-  Text,
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Animated,
-  useWindowDimensions,
-  ImageBackground,
-} from 'react-native';
+import React, { useRef, useState } from 'react';
 import Header from '@/components/Header/Header';
 import TextInput from '@/components/TextField/TextInput';
+import {
+  Animated,
+  ImageBackground,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 const images = [
   'https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683431.jpg?t=st=1697963175~exp=1697966775~hmac=49a35ac53bae25934b67d94e9a56da68b49df6385f16c6735994275c66ca0717&w=1380',
   'https://img.freepik.com/free-photo/luxury-modern-bedroom-with-comfortable-double-bed-generated-by-ai_24640-87758.jpg?t=st=1697963227~exp=1697966827~hmac=ae4c8ef44689763ded6eb241c6b72cf5b50c4ef915ab089b06e1f163bb2dc79f&w=1380',
   'https://img.freepik.com/free-photo/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-shelf_105762-2077.jpg?w=1060&t=st=1697963258~exp=1697963858~hmac=e6f5d4150df7dc615c024b19aa4380cef7218443b87008276f84cfb6e6f2c69f',
 ];
 
-
-
 const DetailRooms: FCC<{}> = () => {
   const scrollX = useRef(new Animated.Value(0)).current;
-
+  const [text, setText] = useState('');
   const { width: windowWidth } = useWindowDimensions();
-
 
   return (
     <>
-      <Header leftBtnVariant="back" onPressLeftButton={() => { }} />
+      <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
       <SafeAreaView style={styles.root}>
         <View style={styles.scrollContainer}>
           <ScrollView
@@ -104,28 +97,15 @@ const DetailRooms: FCC<{}> = () => {
             which is different from font-family in CSS
           </Text>
         </View>
-
         <View style={styles.descriptionWrapper}>
           <Text style={styles.description}>Comment</Text>
         </View>
-        {/* <View style={{ width: '100%' }}>
-            <TextInput
-              label="Comment"
-              placeholder="Let's me know what you are thinking"
-              onFocus={setActive}
-              onBlur={setActive}
-              active={active}
-              value={comment}
-              onChangeText={setComment}
-            />
-          </View> */}
-        <InputScrollView>
-          <TextInput />
-          <TextInput />
-          <TextInput value={text}
-            onChangeText={text => this.setState({ text })}
-            multiline />
-        </InputScrollView>
+        <TextInput
+          label="Add your comment"
+          placeholder="Let's me know what you are thinking"
+          value={text}
+          onChangeText={setText}
+        />
       </SafeAreaView>
     </>
   );
@@ -138,7 +118,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: color.white,
     alignItems: 'center',
-    gap: 58,
+    gap: 10,
   },
   container: {
     flex: 1,
@@ -200,7 +180,6 @@ const styles = StyleSheet.create({
     height: 1.5,
     backgroundColor: color.text.dark,
     marginHorizontal: '20%',
-    marginTop: -30,
   },
   flexRow: {
     flexDirection: 'row',
@@ -213,14 +192,8 @@ const styles = StyleSheet.create({
   content: {
     fontSize: 16,
     marginLeft: 25,
-    marginTop: -30,
   },
-  // text: {
-  //   fontSize: 16,
-  //   fontWeight: '16',
-  // },
   details: {
-    marginTop: -50,
     backgroundColor: color.white,
     width: '100%',
   },
@@ -234,7 +207,6 @@ const styles = StyleSheet.create({
     top: 20,
   },
   descriptionWrapper: {
-    marginTop: -70,
     marginHorizontal: 20,
   },
   description: {

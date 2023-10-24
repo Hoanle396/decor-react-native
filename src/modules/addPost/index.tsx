@@ -1,9 +1,11 @@
 import { createPost } from '@/apis/post/requests';
+import Button from '@/components/Button';
 import Header from '@/components/Header/Header';
 import ImageInput from '@/components/ImageField';
 import SelectInput from '@/components/SelectField';
 import TextInput from '@/components/TextField/TextInput';
 import { color } from '@/constants/color';
+import { useHideBottomBar } from '@/hooks/useHideBottomBar';
 import { useToggle } from '@/hooks/useToggle';
 import { FCC } from '@/types';
 import { TabRoute } from '@/types/navigation';
@@ -26,11 +28,11 @@ import { useMutation } from 'react-query';
 type Props = {};
 
 const AddPost: FCC<Props> = () => {
+  useHideBottomBar();
   const [name, setName] = useState('');
   const [activeName, onToggleActiveName] = useToggle();
   const [description, setDescription] = useState('');
   const [activeDescription, onToggleActiveDescription] = useToggle();
-
   const [category, setCategory] = useState('');
 
   const [imageList, setImageList] = useState<ImageTypes[]>([]);
@@ -172,6 +174,14 @@ const AddPost: FCC<Props> = () => {
                     onValueChange={setImageList}
                     placeholder="Choose your images"
                   />
+                </View>
+                <View style={styles.form}>
+                  <Button
+                    onPress={handelPublish}
+                    style={{ width: 232, alignSelf: 'center' }}
+                  >
+                    Publish
+                  </Button>
                 </View>
                 <View style={{ height: 100 }} />
               </View>

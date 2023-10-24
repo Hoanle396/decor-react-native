@@ -19,38 +19,38 @@ const Profile: FCC<{}> = () => {
     <>
       <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
       <SafeAreaView style={styles.root}>
-        <View style={styles.header}>
-          <Text style={styles.name}>Thuy duong</Text>
-          <Image
-            style={styles.image}
-            source={require('@/assets/avatarn.png')}
-            alt="avartar"
-          />
-        </View>
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={[{ flex: 1 }, styles.root]}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={[styles.header]}>
+            <Text style={styles.name}>Thuy duong</Text>
+            <Image
+              style={styles.image}
+              source={require('@/assets/avatarn.png')}
+              alt="avartar"
+            />
+          </View>
           <View style={styles.body}>
             <View style={styles.allAction}>
-              <Text>Change Password</Text>
-              <AntDesign name="unlock" size={24} color="black" />
+              <Text style={styles.itemText}>Change Password</Text>
+              <AntDesign name="unlock" size={24} color={color.text.grey} />
             </View>
             <View style={styles.allAction}>
-              <Text>Shops around here</Text>
-              <EvilIcons name="location" size={24} color="black" />
+              <Text style={styles.itemText}>Shops around here</Text>
+              <EvilIcons name="location" size={24} color={color.text.grey} />
             </View>
             <View style={styles.allAction}>
-              <Text>Payment</Text>
-              <MaterialIcons name="payment" size={24} color="black" />
+              <Text style={styles.itemText}>Payment</Text>
+              <MaterialIcons name="payment" size={24} color={color.text.grey} />
             </View>
             <View style={styles.allAction}>
-              <Text>Setting</Text>
-              <EvilIcons name="gear" size={24} color="black" />
-            </View>
-            <View style={styles.allAction}>
-              <Text>Logout</Text>
-              <MaterialIcons name="logout" size={24} color="black" />
+              <Text style={styles.itemText}>Setting</Text>
+              <EvilIcons name="gear" size={24} color={color.text.grey} />
             </View>
             <Button style={styles.button}>logout</Button>
           </View>
+          <View style={{ height: 120 }} />
         </ScrollView>
       </SafeAreaView>
     </>
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     backgroundColor: color.white,
     flex: 1,
     paddingHorizontal: '7%',
-    gap: 20,
   },
   header: {
     display: 'flex',
@@ -87,15 +86,20 @@ const styles = StyleSheet.create({
     color: color.text.light,
   },
   body: {
-    paddingTop: '10%',
+    paddingTop: '15%',
     flex: 1,
-    gap: 50,
+    gap: 36,
+  },
+  itemText: {
+    fontWeight: '500',
+    fontSize: 16,
+    color: color.text.grey,
   },
   allAction: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.5,
     borderBottomColor: color.primary,
     paddingBottom: 10,
   },

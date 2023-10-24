@@ -1,12 +1,20 @@
 import { color } from '@/constants/color';
 import Home from '@/modules/home';
+import Profile from '@/modules/profile';
 import Search from '@/modules/search';
 import { Ionicons } from '@expo/vector-icons';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BottomTabBar,
+  createBottomTabNavigator,
+} from '@react-navigation/bottom-tabs';
 import React from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
+import Animated, {
+  FadeInUp,
+  FadeOutDown,
+  Layout,
+} from 'react-native-reanimated';
 import { AddPostNavigation, CategoryNavigation } from './Category';
-import Profile from '@/modules/profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,6 +27,15 @@ const BottomTab = () => {
         tabBarShowLabel: false,
         headerShown: false,
       })}
+      tabBar={props => (
+        <Animated.View
+          entering={FadeInUp}
+          exiting={FadeOutDown}
+          layout={Layout.duration(1000)}
+        >
+          <BottomTabBar {...props} />
+        </Animated.View>
+      )}
     >
       <Tab.Screen
         name="Dashboard"
@@ -66,7 +83,6 @@ const BottomTab = () => {
               />
             </View>
           ),
-          tabBarIconStyle: {},
         }}
       />
       <Tab.Screen
