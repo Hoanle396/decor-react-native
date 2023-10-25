@@ -1,3 +1,4 @@
+import { useCategory } from '@/apis/post';
 import { createPost } from '@/apis/post/requests';
 import Button from '@/components/Button';
 import Header from '@/components/Header/Header';
@@ -8,11 +9,11 @@ import { color } from '@/constants/color';
 import { useHideBottomBar } from '@/hooks/useHideBottomBar';
 import { useToggle } from '@/hooks/useToggle';
 import { FCC } from '@/types';
-import { TabRoute } from '@/types/navigation';
+import { RootStackRoute } from '@/types/navigation';
 import { ImageTypes } from '@/types/utils';
 import { toast } from '@backpackapp-io/react-native-toast';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Image,
   Keyboard,
@@ -34,10 +35,17 @@ const AddPost: FCC<Props> = () => {
   const [description, setDescription] = useState('');
   const [activeDescription, onToggleActiveDescription] = useToggle();
   const [category, setCategory] = useState('');
+  const { data } = useCategory();
+  const options = useMemo(() => {
+    return data?.data?.map(item => ({
+      label: item.name,
+      value: String(item.id),
+    }));
+  }, [data?.data]);
 
   const [imageList, setImageList] = useState<ImageTypes[]>([]);
 
-  const navigation = useNavigation<NavigationProp<TabRoute, 'Create'>>();
+  const navigation = useNavigation<NavigationProp<RootStackRoute, 'Create'>>();
 
   const onBack = () => {
     navigation.canGoBack() && navigation.goBack();
@@ -148,10 +156,7 @@ const AddPost: FCC<Props> = () => {
                     placeholder="Choose your category"
                     value={category}
                     onChangeText={setCategory}
-                    data={[
-                      { value: '1', label: 'New post' },
-                      { value: '2', label: 'New post 2' },
-                    ]}
+                    data={options}
                   />
                 </View>
                 <View style={styles.form}>

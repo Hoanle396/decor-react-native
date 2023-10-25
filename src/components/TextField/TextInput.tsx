@@ -26,7 +26,7 @@ const TextInput: FCC<Props> = ({
 }) => {
   const [height, setHeight] = useState(24);
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <View
         style={[
           styles.container,

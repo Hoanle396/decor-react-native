@@ -1,11 +1,23 @@
-import { color } from '@/constants/color';
-import { FCC } from '@/types';
-import React, { useRef, useState } from 'react';
+import {
+  postCommentsById,
+  useCommentsByPostId,
+  usePostById,
+} from '@/apis/post';
 import Header from '@/components/Header/Header';
 import TextInput from '@/components/TextField/TextInput';
+import { color } from '@/constants/color';
+import { FCC } from '@/types';
+import { RootStackRoute } from '@/types/navigation';
+import { toast } from '@backpackapp-io/react-native-toast';
+import { Feather } from '@expo/vector-icons';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useRef, useState } from 'react';
 import {
   Animated,
+  Image,
   ImageBackground,
+  Keyboard,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,101 +25,190 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-const images = [
-  'https://img.freepik.com/free-photo/room-interior-hotel-bedroom_23-2150683431.jpg?t=st=1697963175~exp=1697966775~hmac=49a35ac53bae25934b67d94e9a56da68b49df6385f16c6735994275c66ca0717&w=1380',
-  'https://img.freepik.com/free-photo/luxury-modern-bedroom-with-comfortable-double-bed-generated-by-ai_24640-87758.jpg?t=st=1697963227~exp=1697966827~hmac=ae4c8ef44689763ded6eb241c6b72cf5b50c4ef915ab089b06e1f163bb2dc79f&w=1380',
-  'https://img.freepik.com/free-photo/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-shelf_105762-2077.jpg?w=1060&t=st=1697963258~exp=1697963858~hmac=e6f5d4150df7dc615c024b19aa4380cef7218443b87008276f84cfb6e6f2c69f',
-];
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useMutation } from 'react-query';
 
-const DetailRooms: FCC<{}> = () => {
+type Props = {
+  navigation: NativeStackNavigationProp<RootStackRoute, 'detailRooms'>;
+  route: RouteProp<{ params: { id: string } }, 'params'>;
+};
+
+const DetailRooms: FCC<Props> = ({ route, navigation }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const [text, setText] = useState('');
   const { width: windowWidth } = useWindowDimensions();
 
+  const { id } = route.params;
+  const { data } = usePostById(id);
+  const { data: comments, refetch } = useCommentsByPostId(id);
+
+  const onBack = () => {
+    navigation.canGoBack() && navigation.goBack();
+  };
+
+  const { mutate } = useMutation(postCommentsById, {
+    onSuccess: () => {
+      toast.success('Your comments have been received', {
+        duration: 3000,
+        styles: {
+          view: {
+            backgroundColor: color.background.default,
+          },
+          text: {
+            color: color.success.main,
+          },
+        },
+        icon: '✔',
+      });
+      setText('');
+      refetch();
+    },
+  });
+  const onComment = () => {
+    if (!text) {
+      return;
+    }
+    mutate({ id, text });
+  };
   return (
-    <>
-      <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
-      <SafeAreaView style={styles.root}>
-        <View style={styles.scrollContainer}>
-          <ScrollView
-            horizontal={true}
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: {
-                    contentOffset: {
-                      x: scrollX,
-                    },
-                  },
-                },
-              ],
-              { useNativeDriver: false },
-            )}
-            scrollEventThrottle={1}
+    <KeyboardAwareScrollView
+      extraScrollHeight={48}
+      contentContainerStyle={{ backgroundColor: color.white }}
+      showsVerticalScrollIndicator={false}
+    >
+      <Header leftBtnVariant="back" onPressLeftButton={onBack} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+          <SafeAreaView
+            style={[
+              styles.root,
+              {
+                alignItems: 'center',
+              },
+            ]}
           >
-            {images.map((image, imageIndex) => {
-              return (
-                <View
-                  style={{ width: windowWidth, height: 250 }}
-                  key={imageIndex}
-                >
-                  <ImageBackground
-                    source={{ uri: image }}
-                    style={styles.card}
-                  />
-                </View>
-              );
-            })}
-          </ScrollView>
-          <View style={styles.indicatorContainer}>
-            {images.map((image, imageIndex) => {
-              const width = scrollX.interpolate({
-                inputRange: [
-                  windowWidth * (imageIndex - 1),
-                  windowWidth * imageIndex,
-                  windowWidth * (imageIndex + 1),
-                ],
-                outputRange: [11, 23, 11],
-                extrapolate: 'clamp',
-              });
-              return (
-                <Animated.View
-                  key={imageIndex}
-                  style={[styles.normalDot, { width }]}
-                />
-              );
-            })}
-          </View>
-        </View>
-        <View style={styles.details}>
-          <View style={styles.titleRow}>
-            <Text style={styles.title}>Decor Bedroom</Text>
-          </View>
-        </View>
-        <View style={styles.flexRow}>
-          <View style={styles.under} />
-        </View>
-        <View style={styles.descriptionWrapper}>
-          <Text style={styles.description}>Description</Text>
-          <Text style={styles.descText}>
-            You also lose the ability to set up a default font for an entire
-            subtree. Meanwhile, fontFamily only accepts a single font name,
-            which is different from font-family in CSS
-          </Text>
-        </View>
-        <View style={styles.descriptionWrapper}>
-          <Text style={styles.description}>Comment</Text>
-        </View>
-        <TextInput
-          label="Add your comment"
-          placeholder="Let's me know what you are thinking"
-          value={text}
-          onChangeText={setText}
-        />
-      </SafeAreaView>
-    </>
+            <View style={styles.scrollContainer}>
+              <ScrollView
+                horizontal={true}
+                pagingEnabled
+                showsHorizontalScrollIndicator={false}
+                onScroll={Animated.event(
+                  [
+                    {
+                      nativeEvent: {
+                        contentOffset: {
+                          x: scrollX,
+                        },
+                      },
+                    },
+                  ],
+                  { useNativeDriver: false },
+                )}
+                scrollEventThrottle={1}
+              >
+                {data?.images.map((image, imageIndex) => {
+                  return (
+                    <View
+                      style={{ width: windowWidth, height: 250 }}
+                      key={imageIndex}
+                    >
+                      <ImageBackground
+                        source={{ uri: image.url }}
+                        style={styles.card}
+                      />
+                    </View>
+                  );
+                })}
+              </ScrollView>
+              <View style={styles.indicatorContainer}>
+                {data?.images.map((image, imageIndex) => {
+                  const width = scrollX.interpolate({
+                    inputRange: [
+                      windowWidth * (imageIndex - 1),
+                      windowWidth * imageIndex,
+                      windowWidth * (imageIndex + 1),
+                    ],
+                    outputRange: [11, 23, 11],
+                    extrapolate: 'clamp',
+                  });
+                  return (
+                    <Animated.View
+                      key={imageIndex}
+                      style={[styles.normalDot, { width }]}
+                    />
+                  );
+                })}
+              </View>
+            </View>
+            <View style={styles.details}>
+              <View style={styles.titleRow}>
+                <Text style={styles.title}>{data?.name}</Text>
+              </View>
+            </View>
+            <View style={styles.flexRow}>
+              <View style={styles.under} />
+            </View>
+            <View style={styles.descriptionWrapper}>
+              <Text style={styles.description}>Description</Text>
+              <Text style={styles.descText}>{data?.description}</Text>
+            </View>
+            <View style={styles.descriptionWrapper}>
+              <Text style={styles.description}>Comment</Text>
+              <TextInput
+                label="Enter your comment"
+                placeholder="Let's me know what you are thinking"
+                active
+                style={{ width: '100%' }}
+                value={text}
+                onChangeText={setText}
+                rightIcon={
+                  <TouchableOpacity onPress={onComment}>
+                    <Feather name="send" size={28} color={color.primary} />
+                  </TouchableOpacity>
+                }
+              />
+            </View>
+            <View
+              style={[
+                styles.descriptionWrapper,
+                { marginTop: 10, display: 'flex', gap: 20 },
+              ]}
+            >
+              {comments &&
+                comments?.data.map(item => (
+                  <View
+                    key={item.id}
+                    style={{
+                      flexDirection: 'row',
+                      gap: 8,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Image
+                      source={{ uri: item.createdBy.avatar }}
+                      width={40}
+                      height={40}
+                      borderRadius={25}
+                    />
+                    <View style={{ flex: 1, gap: 3 }}>
+                      <Text style={styles.userInfo}>
+                        {item.createdBy.fullname} -{' '}
+                        {new Date(item.createdAt).toDateString()}
+                      </Text>
+                      <Text>{item.text}</Text>
+                    </View>
+                  </View>
+                ))}
+            </View>
+            <View style={{ height: 60 }} />
+          </SafeAreaView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -117,7 +218,6 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: color.white,
-    alignItems: 'center',
     gap: 10,
   },
   container: {
@@ -183,11 +283,17 @@ const styles = StyleSheet.create({
   },
   flexRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    width: '100%',
+    gap: 4,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  userInfo: {
+    fontSize: 16,
+    fontWeight: '500',
   },
   content: {
     fontSize: 16,
@@ -207,7 +313,9 @@ const styles = StyleSheet.create({
     top: 20,
   },
   descriptionWrapper: {
-    marginHorizontal: 20,
+    paddingHorizontal: 20,
+    width: '100%',
+    gap: 8,
   },
   description: {
     fontSize: 16,

@@ -1,3 +1,4 @@
+import { useCategory } from '@/apis/post';
 import CategoryPost from '@/components/CategoryPost';
 import Header from '@/components/Header/Header';
 import { color } from '@/constants/color';
@@ -8,6 +9,7 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 const score = 33;
 
 const Home: FCC<{}> = () => {
+  const { data } = useCategory();
   return (
     <>
       <Header
@@ -43,80 +45,21 @@ const Home: FCC<{}> = () => {
         </View>
         <View />
         <View style={styles.container}>
-          <CategoryPost
-            items={[
-              {
-                name: 'Đèn chùm pha lê vương miện',
-                image:
-                  'https://img.freepik.com/free-photo/armchair-green-living-room-with-copy-space_43614-910.jpg',
-              },
-              {
-                name: '5 cành lau sậy khô trang trí decor phòng',
-                image:
-                  'https://t3.ftcdn.net/jpg/01/24/43/18/240_F_124431883_b7rtANYu3KAujBnCcSmhoTBG16bVj5oA.jpg',
-              },
-              {
-                name: 'Hoa cúc họa mi decor phòng siêu xinh ',
-                image:
-                  'https://t3.ftcdn.net/jpg/02/05/70/38/240_F_205703808_G2g2GEVLICIgY4brtk9rbtTrM4ECU9Hb.jpg',
-              },
-            ]}
-            name="New post"
-            seeMore="detail"
-          />
-          <CategoryPost
-            items={[
-              {
-                name: 'Đèn chùm pha lê vương miện',
-                image:
-                  'https://t3.ftcdn.net/jpg/06/21/01/48/240_F_621014843_d1cVw0C4ANf1RUNyqSFUTMdoDFenxDWG.jpg',
-              },
-              {
-                name: '5 cành lau sậy khô trang trí decor phòng',
-                image:
-                  'https://t3.ftcdn.net/jpg/01/05/15/66/240_F_105156652_kR4xiR42PYzrW8Fsm5xOqVx8Iuyw1wHc.jpg',
-              },
-              {
-                name: 'Hoa cúc họa mi decor phòng siêu xinh ',
-                image:
-                  'https://t4.ftcdn.net/jpg/02/26/89/17/240_F_226891786_euuJrBPMlXnilY4cF1DtXa011igAm7nG.jpg',
-              },
-              {
-                name: 'Hoa cúc họa mi decor phòng siêu xinh 1',
-                image:
-                  'https://t3.ftcdn.net/jpg/02/08/98/28/240_F_208982824_JytYAbfZEx2F1BHnzqdtcioRQvOpdEGm.jpg',
-              },
-            ]}
-            name="Decorating bedrooms"
-            seeMore="detail"
-          />
-          <CategoryPost
-            items={[
-              {
-                name: 'Đèn chùm pha lê vương miện',
-                image:
-                  'https://t4.ftcdn.net/jpg/06/50/99/17/240_F_650991787_BAcOLgZiZkBGXK5vSLb0m3A7JdKVIYiO.jpg',
-              },
-              {
-                name: '5 cành lau sậy khô trang trí decor phòng',
-                image:
-                  'https://t4.ftcdn.net/jpg/06/29/84/79/240_F_629847926_uebKBnvFUnk3CA8WJNX7dvA6yQz3ymsi.jpg',
-              },
-              {
-                name: 'Hoa cúc họa mi decor phòng siêu xinh ',
-                image:
-                  'https://t3.ftcdn.net/jpg/02/08/98/28/240_F_208982824_JytYAbfZEx2F1BHnzqdtcioRQvOpdEGm.jpg',
-              },
-            ]}
-            name="Attention"
-            seeMore="detail"
-          />
+          {data?.data &&
+            data?.data.map(item => (
+              <CategoryPost
+                key={item.id}
+                category={item}
+                name={item.name}
+                onSeeMore={() => {}}
+              />
+            ))}
         </View>
-        <View style={styles.container}>
+        {/* <View style={styles.container}>
           <View style={styles.header}>
             <Text style={styles.title}>Feed back</Text>
           </View>
-        </View>
+        </View> */}
         <View style={{ height: 120 }} />
       </ScrollView>
     </>
