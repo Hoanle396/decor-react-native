@@ -1,27 +1,35 @@
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { usePostByCategoryId } from '@/apis/post';
+import Product from '@/components/Production';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
-import { useNavigation } from '@react-navigation/native';
+import { RootStackRoute } from '@/types/navigation';
+import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
-import SelectDropdown from 'react-native-select-dropdown';
 import {
   Image,
   SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
   ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
-import Product from '@/components/Production';
-
-const PostCategory: FCC<{}> = () => {
+import SelectDropdown from 'react-native-select-dropdown';
+type Props = {
+  navigation: NativeStackNavigationProp<RootStackRoute, 'detailRooms'>;
+  route: RouteProp<{ params: { id: string; name: string } }, 'params'>;
+};
+const PostCategory: FCC<Props> = ({ navigation, route }) => {
   const time = ['Jan-2', 'Feb-3', 'Mar-3', 'Apr-7', 'May-3'];
   const [_, setSelectedValue] = useState(null);
-  const navigation = useNavigation<any>();
-  const onRoute = (name: string) => {
-    navigation.navigate('categoryPost', name);
+
+  const { id, name } = route.params;
+
+  const { data } = usePostByCategoryId({ id });
+
+  const onRoute = (postID: string) => {
+    navigation.navigate('detailRooms', { id: postID });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -30,7 +38,7 @@ const PostCategory: FCC<{}> = () => {
         source={require('@/assets/logo.png')}
         alt="Logo Image"
       />
-      <Text style={styles.text2}>{'Tranh treo tường'}</Text>
+      <Text style={styles.text2}>{name}</Text>
       <View style={styles.body}>
         <MaterialIcons name="filter-list" size={24} color="black" />
         <SelectDropdown
@@ -42,7 +50,7 @@ const PostCategory: FCC<{}> = () => {
           buttonStyle={{
             backgroundColor: color.white,
             height: 20,
-            width: 90,
+            width: 100,
             paddingHorizontal: 0,
           }}
           buttonTextStyle={{
@@ -64,7 +72,7 @@ const PostCategory: FCC<{}> = () => {
           buttonStyle={{
             backgroundColor: color.white,
             height: 20,
-            width: 90,
+            width: 100,
             paddingHorizontal: 0,
           }}
           buttonTextStyle={{
@@ -78,12 +86,12 @@ const PostCategory: FCC<{}> = () => {
         />
         <Feather name="filter" size={24} color="black" />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
         <View style={styles.product}>
-          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
-          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
-          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
-          <Product onClick={() => onRoute('Tranh treo phòng khách')} />
+          {data?.data &&
+            data.data.map(item => (
+              <Product data={item} key={item.id} onClick={onRoute} />
+            ))}
         </View>
         <View style={{ height: 120 }} />
       </ScrollView>
@@ -97,7 +105,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: color.white,
-    alignItems: 'center',
     gap: 24,
   },
   button: {
@@ -119,6 +126,7 @@ const styles = StyleSheet.create({
   text2: {
     fontSize: 30,
     fontWeight: '700',
+    textAlign: 'center',
   },
   text: {
     fontSize: 13,
@@ -133,8 +141,9 @@ const styles = StyleSheet.create({
   },
   product: {
     flexDirection: 'row',
+    flex: 1,
     justifyContent: 'space-between',
-    gap: 5,
+    gap: 15,
     rowGap: 25,
     flexWrap: 'wrap',
     paddingHorizontal: '7%',

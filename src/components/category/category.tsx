@@ -1,3 +1,4 @@
+import { ICategory } from '@/apis/post';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
 import { FontAwesome } from '@expo/vector-icons';
@@ -6,16 +7,20 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type Props = {
-  onClick: (name: string) => void;
+  onClick: (params: { id: string; name: string }) => void;
+  data: ICategory;
 };
-const Category: FCC<Props> = ({ onClick }) => {
+const Category: FCC<Props> = ({ onClick, data }) => {
   return (
-    <TouchableOpacity style={styles.body} onPress={() => onClick('den')}>
+    <TouchableOpacity
+      style={styles.body}
+      onPress={() => onClick({ id: String(data.id), name: data.name ?? '' })}
+    >
       <View style={styles.Category}>
         <View style={styles.picture}>
-          <Image style={styles.img} source={require('@/assets/avatar.png')} />
+          <Image style={styles.img} source={{ uri: data.image }} />
         </View>
-        <Text style={styles.nameCategory}> Den</Text>
+        <Text style={styles.nameCategory}>{data.name}</Text>
         <FontAwesome name="angle-right" size={24} color="black" />
       </View>
     </TouchableOpacity>

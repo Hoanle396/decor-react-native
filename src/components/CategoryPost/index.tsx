@@ -18,11 +18,10 @@ import { MotiView } from 'moti';
 
 type Props = {
   name: string;
-  onSeeMore: () => void;
   category: ICategory;
 };
 
-const CategoryPost: FCC<Props> = ({ name, category, onSeeMore }) => {
+const CategoryPost: FCC<Props> = ({ name, category }) => {
   const { width } = useWindowDimensions();
   const { data, isLoading } = usePostByCategoryId({
     id: String(category.id),
@@ -34,6 +33,11 @@ const CategoryPost: FCC<Props> = ({ name, category, onSeeMore }) => {
     navigation.navigate('detailRooms', { id: String(id) });
   };
 
+  const onSeeMore = ({ id, name }: { id: string; name: string }) => {
+    navigation.navigate('categoryPost', { id, name });
+    //bug
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -42,7 +46,9 @@ const CategoryPost: FCC<Props> = ({ name, category, onSeeMore }) => {
           variants="text"
           style={{ height: 20, padding: 0 }}
           textStyle={{ fontSize: 12 }}
-          onPress={onSeeMore}
+          onPress={() =>
+            onSeeMore({ id: String(category.id), name: category.name })
+          }
         >
           see more
         </Button>

@@ -1,7 +1,7 @@
-import { Ionicons } from '@expo/vector-icons';
+import { EvilIcons, Ionicons } from '@expo/vector-icons';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Image,
@@ -12,12 +12,51 @@ import {
   Text,
 } from 'react-native';
 import Header from '@/components/Header/Header';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { RootStackRoute } from '@/types/navigation';
 
 const Search: FCC<{}> = () => {
-  const [text, onChangeText] = React.useState('');
+  const [text, onChangeText] = useState('');
+
+  const [lastSearch, setLastSearch] = useState([
+    'Đèn thả quả bồ công anh',
+    'Decorative Bedrooms',
+    'Decorative living rooms',
+  ]);
+
+  const navigation = useNavigation<NavigationProp<RootStackRoute, 'search'>>();
+
+  const onBack = () => {
+    navigation.canGoBack() && navigation.goBack();
+  };
+
+  const handleClear = (key: string) => {
+    setLastSearch(prev =>
+      prev.filter(item => item.toLowerCase() !== key.toLowerCase()),
+    );
+  };
+
+  const SearchItem = ({
+    data,
+    onPress,
+  }: {
+    data: string;
+    onPress: () => void;
+  }) => {
+    return (
+      <View style={styles.itemSearch}>
+        <Text style={styles.result}>{data}</Text>
+        <TouchableOpacity onPress={onPress}>
+          <EvilIcons name="close-o" size={16} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <>
-      <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
+      <Header leftBtnVariant="back" onPressLeftButton={onBack} />
       <SafeAreaView style={styles.root}>
         <Image
           style={styles.image}
@@ -27,7 +66,7 @@ const Search: FCC<{}> = () => {
         <View style={styles.container}>
           <View style={styles.search}>
             <Ionicons
-              style={styles.iconsearch}
+              style={styles.iconSearch}
               name="search"
               size={24}
               color="black"
@@ -42,10 +81,17 @@ const Search: FCC<{}> = () => {
           <View style={styles.body}>
             <View style={styles.text2}>
               <Text style={styles.lastInput}>History</Text>
-              <Text style={styles.deleteAll}>delete all</Text>
+              <TouchableOpacity onPress={() => setLastSearch([])}>
+                <Text style={styles.deleteAll}>delete all</Text>
+              </TouchableOpacity>
             </View>
-            <Text style={styles.result}>{'Đèn thả quả bồ công anh'}</Text>
-            <Text style={styles.result}>{'Thảm lông trải sàn'}</Text>
+            {lastSearch.map(item => (
+              <SearchItem
+                data={item}
+                key={item}
+                onPress={() => handleClear(item)}
+              />
+            ))}
           </View>
         </View>
       </SafeAreaView>
@@ -88,7 +134,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 56,
   },
-  iconsearch: {
+  iconSearch: {
     width: '100%',
     flex: 0.08,
   },
@@ -124,5 +170,10 @@ const styles = StyleSheet.create({
     color: color.text.dark,
     fontWeight: '700',
     fontSize: 15,
+  },
+  itemSearch: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });

@@ -5,11 +5,14 @@ import React from 'react';
 import Category from '@/components/category/category';
 import { useNavigation } from '@react-navigation/native';
 import { Image, SafeAreaView, StyleSheet, Text } from 'react-native';
+import { useCategory } from '@/apis/post';
 
 const Product: FCC<{}> = () => {
+  const { data } = useCategory();
+
   const navigation = useNavigation<any>();
-  const onRoute = (name: string) => {
-    navigation.navigate('categoryPost', name);
+  const onRoute = (params: { id: string; name: string }) => {
+    navigation.navigate('categoryPost', params);
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -19,10 +22,10 @@ const Product: FCC<{}> = () => {
         alt="Logo Image"
       />
       <Text style={styles.list}>Category</Text>
-      <Category onClick={() => onRoute('den')} />
-      <Category onClick={() => onRoute('den')} />
-      <Category onClick={() => onRoute('den')} />
-      <Category onClick={() => onRoute('den')} />
+      {data?.data &&
+        data.data.map(item => (
+          <Category data={item} key={item.id} onClick={onRoute} />
+        ))}
     </SafeAreaView>
   );
 };

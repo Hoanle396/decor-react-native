@@ -5,6 +5,7 @@ import Header from '@/components/Header/Header';
 import ImageInput from '@/components/ImageField';
 import SelectInput from '@/components/SelectField';
 import TextInput from '@/components/TextField/TextInput';
+import TextGradient from '@/components/TextGradient';
 import { color } from '@/constants/color';
 import { useHideBottomBar } from '@/hooks/useHideBottomBar';
 import { useToggle } from '@/hooks/useToggle';
@@ -137,6 +138,9 @@ const AddPost: FCC<Props> = () => {
           >
             <SafeAreaView style={[styles.container, { alignItems: 'center' }]}>
               <View style={styles.root}>
+                <TextGradient style={styles.slogan}>
+                  Let's Share Decorations and Create Dreamlike Spaces Together.
+                </TextGradient>
                 <View style={styles.form}>
                   <TextInput
                     label="Name"
@@ -221,5 +225,11 @@ const styles = StyleSheet.create({
   },
   form: {
     width: '100%',
+  },
+  slogan: {
+    fontSize: 20,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginHorizontal: 20,
   },
 });

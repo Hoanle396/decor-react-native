@@ -53,12 +53,7 @@ const Home: FCC<{}> = () => {
               .map((_, i) => <CategoryPostLoading key={i} />)}
           {data?.data &&
             data?.data.map(item => (
-              <CategoryPost
-                key={item.id}
-                category={item}
-                name={item.name}
-                onSeeMore={() => {}}
-              />
+              <CategoryPost key={item.id} category={item} name={item.name} />
             ))}
         </View>
         {/* <View style={styles.container}>
