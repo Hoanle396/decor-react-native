@@ -1,3 +1,4 @@
+import { useUser } from '@/apis/auth';
 import {
   postCommentsById,
   useCommentsByPostId,
@@ -42,6 +43,8 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
   const [text, setText] = useState('');
   const { width: windowWidth } = useWindowDimensions();
 
+  const { user } = useUser();
+
   const { id } = route.params;
   const { data } = usePostById(id);
   const { data: comments, refetch } = useCommentsByPostId(id);
@@ -75,21 +78,17 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
     mutate({ id, text });
   };
   return (
-    <KeyboardAwareScrollView
-      extraScrollHeight={48}
-      contentContainerStyle={{ backgroundColor: color.white }}
-      showsVerticalScrollIndicator={false}
-    >
-      <Header leftBtnVariant="back" onPressLeftButton={onBack} />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
-          <SafeAreaView
-            style={[
-              styles.root,
-              {
-                alignItems: 'center',
-              },
-            ]}
+    <SafeAreaView style={{ flex: 1, backgroundColor: color.white }}>
+      <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
+        <KeyboardAwareScrollView
+          extraScrollHeight={48}
+          contentContainerStyle={{ backgroundColor: color.white, flex: 1 }}
+          showsVerticalScrollIndicator={false}
+        >
+          <Header leftBtnVariant="back" onPressLeftButton={onBack} />
+          <TouchableWithoutFeedback
+            onPress={Keyboard.dismiss}
+            accessible={false}
           >
             <View style={styles.scrollContainer}>
               <ScrollView
@@ -158,19 +157,21 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
             </View>
             <View style={styles.descriptionWrapper}>
               <Text style={styles.description}>Comment</Text>
-              <TextInput
-                label="Enter your comment"
-                placeholder="Let's me know what you are thinking"
-                active
-                style={{ width: '100%' }}
-                value={text}
-                onChangeText={setText}
-                rightIcon={
-                  <TouchableOpacity onPress={onComment}>
-                    <Feather name="send" size={28} color={color.primary} />
-                  </TouchableOpacity>
-                }
-              />
+              {user && user?.data && (
+                <TextInput
+                  label="Enter your comment"
+                  placeholder="Let's me know what you are thinking"
+                  active
+                  style={{ width: '100%' }}
+                  value={text}
+                  onChangeText={setText}
+                  rightIcon={
+                    <TouchableOpacity onPress={onComment}>
+                      <Feather name="send" size={28} color={color.primary} />
+                    </TouchableOpacity>
+                  }
+                />
+              )}
             </View>
             <View
               style={[
@@ -205,10 +206,10 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
                 ))}
             </View>
             <View style={{ height: 60 }} />
-          </SafeAreaView>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAwareScrollView>
+          </TouchableWithoutFeedback>
+        </KeyboardAwareScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

@@ -1,33 +1,19 @@
-import request from '@/apis/axios';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { create } from 'zustand';
 
-const initialState = {
-  fullname: '',
-  email: '',
-  avatar: '',
+type State = {
+  fullname: string;
+  isLogin: boolean;
 };
 
-export const incrementAsync = createAsyncThunk('auth', async () => {
-  const response = await request.get('/auth/secret');
-  return response.data?.data;
-});
+type Action = {
+  updateFullName: (fullname: State['fullname']) => void;
+  updateIsLogin: (isLogin: State['isLogin']) => void;
+};
 
-export const counterSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    setUser: (state, action) => {
-      state = action.payload;
-    },
-  },
-  extraReducers: builder => {
-    builder.addCase(incrementAsync.fulfilled, (state, action) => {
-      state += action.payload;
-    });
-  },
-});
-
-export const { setUser } = counterSlice.actions;
-
-export const selectUser = state => state.auth;
-export default counterSlice.reducer;
+const useAuthStore = create<State & Action>(set => ({
+  fullname: '',
+  isLogin: false,
+  updateFullName: fullname => set(() => ({ fullname: fullname })),
+  updateIsLogin: isLogin => set(() => ({ isLogin: isLogin })),
+}));
+export default useAuthStore;

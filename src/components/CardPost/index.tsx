@@ -1,6 +1,9 @@
 import { FCC } from '@/types';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Skeleton } from 'moti/skeleton';
+import { MotiView } from 'moti';
+import { color } from '@/constants/color';
 
 type Props = {
   name: string;
@@ -19,7 +22,22 @@ const CardPost: FCC<Props> = ({ onPress, image, name }) => {
   );
 };
 
-export default CardPost;
+const CardPostLoading: FCC = () => {
+  return (
+    <MotiView
+      transition={{
+        type: 'timing',
+      }}
+      animate={{ backgroundColor: color.white }}
+      style={styles.container}
+    >
+      <Skeleton height={130} width={100} radius={20} colorMode="light" />
+      <Skeleton width={85} height={14} radius={5} colorMode="light" />
+    </MotiView>
+  );
+};
+
+export { CardPost, CardPostLoading };
 
 const styles = StyleSheet.create({
   container: {

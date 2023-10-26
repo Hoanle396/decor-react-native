@@ -9,10 +9,12 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import Button from '../Button';
-import CardPost from '../CardPost';
+import { CardPost, CardPostLoading } from '../CardPost';
 import { ICategory, usePostByCategoryId } from '@/apis/post';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { RootStackRoute } from '@/types/navigation';
+import { Skeleton } from 'moti/skeleton';
+import { MotiView } from 'moti';
 
 type Props = {
   name: string;
@@ -22,7 +24,7 @@ type Props = {
 
 const CategoryPost: FCC<Props> = ({ name, category, onSeeMore }) => {
   const { width } = useWindowDimensions();
-  const { data } = usePostByCategoryId({
+  const { data, isLoading } = usePostByCategoryId({
     id: String(category.id),
     limit: 5,
   });
@@ -46,6 +48,13 @@ const CategoryPost: FCC<Props> = ({ name, category, onSeeMore }) => {
         </Button>
       </View>
       <View style={styles.list}>
+        {isLoading && (
+          <>
+            <CardPostLoading />
+            <CardPostLoading />
+            <CardPostLoading />
+          </>
+        )}
         <FlatList
           data={data?.data ? data.data : []}
           keyExtractor={item => item.name}
@@ -71,7 +80,22 @@ const CategoryPost: FCC<Props> = ({ name, category, onSeeMore }) => {
   );
 };
 
-export default CategoryPost;
+const CategoryPostLoading: FCC = () => {
+  return (
+    <MotiView style={styles.container}>
+      <View style={styles.header}>
+        <Skeleton height={25} width={200} colorMode="light" />
+        <Skeleton height={20} width={60} colorMode="light" />
+      </View>
+      <View style={styles.list}>
+        <CardPostLoading />
+        <CardPostLoading />
+        <CardPostLoading />
+      </View>
+    </MotiView>
+  );
+};
+export { CategoryPost, CategoryPostLoading };
 const styles = StyleSheet.create({
   container: {
     display: 'flex',

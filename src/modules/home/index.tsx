@@ -1,7 +1,8 @@
 import { useCategory } from '@/apis/post';
-import CategoryPost from '@/components/CategoryPost';
+import { CategoryPost, CategoryPostLoading } from '@/components/CategoryPost';
 import Header from '@/components/Header/Header';
 import { color } from '@/constants/color';
+import { useAuthStore } from '@/redux';
 import { FCC } from '@/types';
 import React from 'react';
 
@@ -9,7 +10,8 @@ import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 const score = 33;
 
 const Home: FCC<{}> = () => {
-  const { data } = useCategory();
+  const { data, isLoading } = useCategory();
+  const { fullname } = useAuthStore(state => state);
   return (
     <>
       <Header
@@ -30,7 +32,7 @@ const Home: FCC<{}> = () => {
         <View style={styles.boxHello}>
           <View style={{ flexDirection: 'column' }}>
             <Text style={{ fontSize: 20, fontWeight: '300' }}>Hello,</Text>
-            <Text style={{ fontSize: 20, fontWeight: '700' }}>Hoàn Lê</Text>
+            <Text style={{ fontSize: 20, fontWeight: '700' }}>{fullname}</Text>
           </View>
           <View style={styles.boxScore}>
             <Text style={styles.silverMember}>SILVER MEMBER</Text>
@@ -45,6 +47,10 @@ const Home: FCC<{}> = () => {
         </View>
         <View />
         <View style={styles.container}>
+          {isLoading &&
+            Array.from({ length: 3 })
+              .fill(0)
+              .map((_, i) => <CategoryPostLoading key={i} />)}
           {data?.data &&
             data?.data.map(item => (
               <CategoryPost

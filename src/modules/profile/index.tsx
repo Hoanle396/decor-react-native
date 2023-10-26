@@ -14,7 +14,17 @@ import {
   View,
 } from 'react-native';
 
+import * as SecureStore from 'expo-secure-store';
+import { useAuthStore } from '@/redux';
+
 const Profile: FCC<{}> = () => {
+  const { updateFullName, updateIsLogin } = useAuthStore(state => state);
+  const onLogout = async () => {
+    await SecureStore.deleteItemAsync('access_token');
+    await SecureStore.deleteItemAsync('refresh_token');
+    updateFullName('');
+    updateIsLogin(false);
+  };
   return (
     <>
       <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
@@ -48,7 +58,9 @@ const Profile: FCC<{}> = () => {
               <Text style={styles.itemText}>Setting</Text>
               <EvilIcons name="gear" size={24} color={color.text.grey} />
             </View>
-            <Button style={styles.button}>logout</Button>
+            <Button style={styles.button} onPress={onLogout}>
+              logout
+            </Button>
           </View>
           <View style={{ height: 120 }} />
         </ScrollView>

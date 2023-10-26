@@ -23,6 +23,7 @@ import { login } from '@/apis/auth/request';
 import { useMutation } from 'react-query';
 import * as SecureStore from 'expo-secure-store';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useAuthStore } from '@/redux';
 
 const Login: FCC<{}> = () => {
   const [isPasswordShown, setIsPasswordShown] = useToggle(true);
@@ -35,10 +36,13 @@ const Login: FCC<{}> = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackRoute, 'login'>>();
 
+  const { updateFullName, updateIsLogin } = useAuthStore(state => state);
   const { mutate } = useMutation(login, {
     onSuccess: async data => {
       await SecureStore.setItemAsync('access_token', data.access_token);
       await SecureStore.setItemAsync('refresh_token', data.refresh_token);
+      updateFullName(data.user.fullname ?? '');
+      updateIsLogin(true);
       navigation.navigate('home');
     },
   });
@@ -121,7 +125,7 @@ const Login: FCC<{}> = () => {
                 onValueChange={setIsChecked}
                 color={isChecked ? color.primary : undefined}
               />
-              <Text style={{ marginLeft: 5}}>Remember password</Text>
+              <Text style={{ marginLeft: 5 }}>Remember password</Text>
             </View>
             <Pressable>
               <Text style={styles.forGotPassword}>Forgot password?</Text>
