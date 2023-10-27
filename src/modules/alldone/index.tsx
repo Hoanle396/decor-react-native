@@ -10,7 +10,7 @@ const Alldone: FCC<{}> = () => {
   const navigation = useNavigation<NavigationProp<RootStackRoute, 'alldone'>>();
 
   const onPress = () => {
-    navigation.navigate('home');
+    navigation.navigate('login');
   };
 
   return (

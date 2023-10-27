@@ -1,13 +1,11 @@
-import { login, register } from '@/apis/auth/request';
+import { register } from '@/apis/auth/request';
 import Button from '@/components/Button';
 import TextInput from '@/components/TextField/TextInput';
 import { color } from '@/constants/color';
-import { useAuthStore } from '@/redux';
 import { FCC } from '@/types';
 import { RootStackRoute } from '@/types/navigation';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import {
   Image,
@@ -33,20 +31,8 @@ const Register: FCC<{}> = () => {
   const navigation =
     useNavigation<NavigationProp<RootStackRoute, 'register'>>();
 
-  const { updateFullName, updateIsLogin } = useAuthStore(state => state);
-  const { mutateAsync } = useMutation(login, {
-    onSuccess: async data => {
-      await SecureStore.setItemAsync('access_token', data.access_token);
-      await SecureStore.setItemAsync('refresh_token', data.refresh_token);
-      updateFullName(data.user.fullname ?? '');
-      updateIsLogin(true);
-      navigation.navigate('alldone');
-    },
-  });
-
   const { mutate } = useMutation(register, {
-    onSuccess: async () =>
-      await mutateAsync({ password: password, username: email }),
+    onSuccess: () => navigation.navigate('alldone'),
   });
 
   const handleRegister = () => {
