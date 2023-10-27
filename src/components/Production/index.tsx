@@ -1,5 +1,7 @@
 import { IPost } from '@/apis/post';
 import { FCC } from '@/types';
+import { View } from 'moti';
+import { Skeleton } from 'moti/skeleton';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
@@ -18,7 +20,15 @@ const Product: FCC<Props> = ({ onClick, data }) => {
   );
 };
 
-export default Product;
+const ProductLoading: FCC = () => {
+  return (
+    <View style={{ flexDirection: 'column', gap: 3 }}>
+      <Skeleton height={198} width={150} colorMode="light" radius={20} />
+      <Skeleton height={20} width={150} colorMode="light" />
+    </View>
+  );
+};
+export { ProductLoading, Product };
 
 const styles = StyleSheet.create({
   img: {

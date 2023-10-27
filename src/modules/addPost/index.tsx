@@ -17,6 +17,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React, { useMemo, useState } from 'react';
 import {
   Image,
+  ImageBackground,
   Keyboard,
   ScrollView,
   StyleSheet,
@@ -24,7 +25,6 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useMutation } from 'react-query';
 
 type Props = {};
@@ -109,38 +109,43 @@ const AddPost: FCC<Props> = () => {
   };
 
   return (
-    <KeyboardAwareScrollView
-      extraScrollHeight={48}
-      contentContainerStyle={[
-        { paddingBottom: 0, flex: 1, backgroundColor: color.white },
-      ]}
-      showsVerticalScrollIndicator={false}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <>
-          <Header
-            leftBtnVariant="back"
-            onPressLeftButton={onBack}
-            rightBtnVariant="post"
-            onPressRightButton={handelPublish}
-            title={
-              <Image
-                style={styles.image}
-                source={require('@/assets/logo.png')}
-                alt="Logo Image"
-              />
-            }
-            height={100}
+    <View style={{ flex: 1 }}>
+      <Header
+        leftBtnVariant="back"
+        onPressLeftButton={onBack}
+        rightBtnVariant="post"
+        onPressRightButton={handelPublish}
+        title={
+          <Image
+            style={styles.image}
+            source={require('@/assets/logo.png')}
+            alt="Logo Image"
           />
+        }
+        height={80}
+      />
+      <KeyboardAwareScrollView
+        contentContainerStyle={[
+          { paddingBottom: 0, flex: 1, backgroundColor: color.white },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
           <ScrollView
             style={styles.container}
             showsVerticalScrollIndicator={false}
           >
-            <SafeAreaView style={[styles.container, { alignItems: 'center' }]}>
-              <View style={styles.root}>
+            <View style={[styles.container, { alignItems: 'center' }]}>
+              <ImageBackground
+                source={require('@/assets/purple-decor.png')}
+                style={styles.bgSlogan}
+                imageStyle={{ resizeMode: 'contain' }}
+              >
                 <TextGradient style={styles.slogan}>
                   Let's Share Decorations and Create Dreamlike Spaces Together.
                 </TextGradient>
+              </ImageBackground>
+              <View style={styles.root}>
                 <View style={styles.form}>
                   <TextInput
                     label="Name"
@@ -194,11 +199,11 @@ const AddPost: FCC<Props> = () => {
                 </View>
                 <View style={{ height: 100 }} />
               </View>
-            </SafeAreaView>
+            </View>
           </ScrollView>
-        </>
-      </TouchableWithoutFeedback>
-    </KeyboardAwareScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAwareScrollView>
+    </View>
   );
 };
 
@@ -231,5 +236,10 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
     marginHorizontal: 20,
+  },
+  bgSlogan: {
+    height: 170,
+    display: 'flex',
+    justifyContent: 'flex-end',
   },
 });

@@ -1,12 +1,13 @@
-import { usePostByCategoryId } from '@/apis/post';
-import Product from '@/components/Production';
+import { useCategory, usePostByCategoryId } from '@/apis/post';
+import { Product, ProductLoading } from '@/components/Production';
+import FilterSelect from '@/components/SelectField/FilterSelect';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
 import { RootStackRoute } from '@/types/navigation';
-import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Image,
   SafeAreaView,
@@ -15,22 +16,28 @@ import {
   Text,
   View,
 } from 'react-native';
-import SelectDropdown from 'react-native-select-dropdown';
 type Props = {
   navigation: NativeStackNavigationProp<RootStackRoute, 'detailRooms'>;
   route: RouteProp<{ params: { id: string; name: string } }, 'params'>;
 };
 const PostCategory: FCC<Props> = ({ navigation, route }) => {
-  const time = ['Jan-2', 'Feb-3', 'Mar-3', 'Apr-7', 'May-3'];
-  const [_, setSelectedValue] = useState(null);
+  const [time, setTime] = useState('');
+  const [category, setCategory] = useState('');
 
   const { id, name } = route.params;
 
-  const { data } = usePostByCategoryId({ id });
+  const { data, isLoading } = usePostByCategoryId({ id });
+  const { data: categories } = useCategory();
 
   const onRoute = (postID: string) => {
     navigation.navigate('detailRooms', { id: postID });
   };
+
+  const option = useMemo(
+    () => categories?.data?.map(item => item.name) ?? [],
+    [categories.data],
+  );
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -41,53 +48,33 @@ const PostCategory: FCC<Props> = ({ navigation, route }) => {
       <Text style={styles.text2}>{name}</Text>
       <View style={styles.body}>
         <MaterialIcons name="filter-list" size={24} color="black" />
-        <SelectDropdown
-          data={time}
-          onSelect={(selectedItem, _) => {
-            setSelectedValue(selectedItem);
-          }}
-          defaultButtonText="Category"
-          buttonStyle={{
-            backgroundColor: color.white,
-            height: 20,
-            width: 100,
-            paddingHorizontal: 0,
-          }}
-          buttonTextStyle={{
-            color: color.primary,
-            fontSize: 13,
-            fontWeight: '700',
-          }}
-          renderDropdownIcon={() => (
-            <AntDesign name="down" size={16} color="black" />
-          )}
+        <FilterSelect
+          label="Category"
+          data={option}
+          value={category}
+          onChangeText={setCategory}
+          style={{ width: 100 }}
         />
 
-        <SelectDropdown
-          data={time}
-          onSelect={(selectedItem, _) => {
-            setSelectedValue(selectedItem);
-          }}
-          defaultButtonText="Date time"
-          buttonStyle={{
-            backgroundColor: color.white,
-            height: 20,
-            width: 100,
-            paddingHorizontal: 0,
-          }}
-          buttonTextStyle={{
-            color: color.primary,
-            fontSize: 13,
-            fontWeight: '700',
-          }}
-          renderDropdownIcon={() => (
-            <AntDesign name="down" size={16} color="black" />
-          )}
+        <FilterSelect
+          label="Date Time"
+          data={['Jan-2', 'Feb-3', 'Mar-3', 'Apr-7', 'May-3']}
+          value={time}
+          onChangeText={setTime}
+          style={{ width: 80 }}
         />
         <Feather name="filter" size={24} color="black" />
       </View>
       <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
         <View style={styles.product}>
+          {isLoading && (
+            <>
+              <ProductLoading />
+              <ProductLoading />
+              <ProductLoading />
+              <ProductLoading />
+            </>
+          )}
           {data?.data &&
             data.data.map(item => (
               <Product data={item} key={item.id} onClick={onRoute} />
@@ -112,8 +99,8 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: 'center',
-    height: 171,
-    top: 30,
+    height: 111,
+    width: 171,
   },
   body: {
     width: '100%',

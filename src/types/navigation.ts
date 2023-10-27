@@ -12,4 +12,6 @@ export type RootStackRoute = {
   History: undefined;
   Create: undefined;
   About: undefined;
+  categoryPost: any;
+  category: undefined;
 };

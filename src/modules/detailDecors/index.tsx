@@ -13,6 +13,7 @@ import { toast } from '@backpackapp-io/react-native-toast';
 import { Feather } from '@expo/vector-icons';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Skeleton } from 'moti/skeleton';
 import React, { useRef, useState } from 'react';
 import {
   Animated,
@@ -46,8 +47,12 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
   const { user } = useUser();
 
   const { id } = route.params;
-  const { data } = usePostById(id);
-  const { data: comments, refetch } = useCommentsByPostId(id);
+  const { data, isLoading } = usePostById(id);
+  const {
+    data: comments,
+    refetch,
+    isLoading: isLoadingComments,
+  } = useCommentsByPostId(id);
 
   const onBack = () => {
     navigation.canGoBack() && navigation.goBack();
@@ -77,6 +82,7 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
     }
     mutate({ id, text });
   };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.white }}>
       <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
@@ -109,19 +115,48 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
                 )}
                 scrollEventThrottle={1}
               >
-                {data?.images.map((image, imageIndex) => {
-                  return (
-                    <View
-                      style={{ width: windowWidth, height: 250 }}
-                      key={imageIndex}
-                    >
-                      <ImageBackground
-                        source={{ uri: image.url }}
-                        style={styles.card}
+                {!isLoading &&
+                  data?.images.map((image, imageIndex) => {
+                    return (
+                      <View
+                        style={{ width: windowWidth, height: 250 }}
+                        key={imageIndex}
+                      >
+                        <ImageBackground
+                          source={{ uri: image.url }}
+                          style={styles.card}
+                        />
+                      </View>
+                    );
+                  })}
+                {isLoading && (
+                  <>
+                    <View style={[styles.loadingBox, { width: windowWidth }]}>
+                      <Skeleton
+                        height={250}
+                        width={windowWidth - 32}
+                        radius={20}
+                        colorMode="light"
                       />
                     </View>
-                  );
-                })}
+                    <View style={[styles.loadingBox, { width: windowWidth }]}>
+                      <Skeleton
+                        height={250}
+                        width={windowWidth - 32}
+                        radius={20}
+                        colorMode="light"
+                      />
+                    </View>
+                    <View style={[styles.loadingBox, { width: windowWidth }]}>
+                      <Skeleton
+                        height={250}
+                        width={windowWidth - 32}
+                        radius={20}
+                        colorMode="light"
+                      />
+                    </View>
+                  </>
+                )}
               </ScrollView>
               <View style={styles.indicatorContainer}>
                 {data?.images.map((image, imageIndex) => {
@@ -145,41 +180,162 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
             </View>
             <View style={styles.details}>
               <View style={styles.titleRow}>
-                <Text style={styles.title}>{data?.name}</Text>
+                {isLoading ? (
+                  <Skeleton
+                    width={windowWidth - 32}
+                    height={24}
+                    colorMode="light"
+                  />
+                ) : (
+                  <Text style={styles.title}>{data?.name}</Text>
+                )}
               </View>
             </View>
             <View style={styles.flexRow}>
-              <View style={styles.under} />
-            </View>
-            <View style={styles.descriptionWrapper}>
-              <Text style={styles.description}>Description</Text>
-              <Text style={styles.descText}>{data?.description}</Text>
-            </View>
-            <View style={styles.descriptionWrapper}>
-              <Text style={styles.description}>Comment</Text>
-              {user && user?.data && (
-                <TextInput
-                  label="Enter your comment"
-                  placeholder="Let's me know what you are thinking"
-                  active
-                  style={{ width: '100%' }}
-                  value={text}
-                  onChangeText={setText}
-                  rightIcon={
-                    <TouchableOpacity onPress={onComment}>
-                      <Feather name="send" size={28} color={color.primary} />
-                    </TouchableOpacity>
-                  }
+              {isLoading ? (
+                <Skeleton
+                  width={windowWidth - 32}
+                  height={10}
+                  colorMode="light"
                 />
+              ) : (
+                <View style={styles.under} />
               )}
             </View>
+            <View style={styles.descriptionWrapper}>
+              {isLoading ? (
+                <>
+                  <Skeleton width={150} height={24} colorMode="light" />
+                  <Skeleton
+                    width={windowWidth - 32}
+                    height={24}
+                    colorMode="light"
+                  />
+                  <Skeleton
+                    width={windowWidth - 32}
+                    height={24}
+                    colorMode="light"
+                  />
+                  <Skeleton
+                    width={windowWidth - 32}
+                    height={24}
+                    colorMode="light"
+                  />
+                  <Skeleton
+                    width={windowWidth - 32}
+                    height={24}
+                    colorMode="light"
+                  />
+                </>
+              ) : (
+                <>
+                  <Text style={styles.description}>Description</Text>
+                  <Text style={styles.descText}>{data?.description}</Text>
+                </>
+              )}
+            </View>
+            {isLoading ? (
+              <View style={styles.descriptionWrapper}>
+                <Skeleton width={150} height={24} colorMode="light" />
+                <Skeleton
+                  width={windowWidth - 32}
+                  height={56}
+                  colorMode="light"
+                />
+              </View>
+            ) : (
+              <View style={styles.descriptionWrapper}>
+                <Text style={styles.description}>Comment</Text>
+                {user && user?.data && (
+                  <TextInput
+                    label="Enter your comment"
+                    placeholder="Let's me know what you are thinking"
+                    active
+                    style={{ width: '100%' }}
+                    value={text}
+                    onChangeText={setText}
+                    rightIcon={
+                      <TouchableOpacity onPress={onComment}>
+                        <Feather name="send" size={28} color={color.primary} />
+                      </TouchableOpacity>
+                    }
+                  />
+                )}
+              </View>
+            )}
             <View
               style={[
                 styles.descriptionWrapper,
-                { marginTop: 10, display: 'flex', gap: 20 },
+                { marginTop: 10, display: 'flex', gap: 32 },
               ]}
             >
-              {comments &&
+              {(isLoading || isLoadingComments) && (
+                <>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 8,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Skeleton
+                      width={40}
+                      height={40}
+                      radius={20}
+                      colorMode="light"
+                    />
+                    <View style={{ flex: 1, gap: 3 }}>
+                      <Text style={styles.userInfo}>
+                        <Skeleton width={150} height={24} colorMode="light" />
+                      </Text>
+                      <Skeleton width={200} height={24} colorMode="light" />
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 8,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Skeleton
+                      width={40}
+                      height={40}
+                      radius={20}
+                      colorMode="light"
+                    />
+                    <View style={{ flex: 1, gap: 3 }}>
+                      <Text style={styles.userInfo}>
+                        <Skeleton width={150} height={24} colorMode="light" />
+                      </Text>
+                      <Skeleton width={200} height={24} colorMode="light" />
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 8,
+                      alignItems: 'flex-start',
+                    }}
+                  >
+                    <Skeleton
+                      width={40}
+                      height={40}
+                      radius={20}
+                      colorMode="light"
+                    />
+                    <View style={{ flex: 1, gap: 3 }}>
+                      <Text style={styles.userInfo}>
+                        <Skeleton width={150} height={24} colorMode="light" />
+                      </Text>
+                      <Skeleton width={200} height={24} colorMode="light" />
+                    </View>
+                  </View>
+                </>
+              )}
+              {!isLoadingComments &&
+                !isLoading &&
+                comments &&
                 comments?.data.map(item => (
                   <View
                     key={item.id}
@@ -198,7 +354,9 @@ const DetailRooms: FCC<Props> = ({ route, navigation }) => {
                     <View style={{ flex: 1, gap: 3 }}>
                       <Text style={styles.userInfo}>
                         {item.createdBy.fullname} -{' '}
-                        {new Date(item.createdAt).toDateString()}
+                        <Text style={{ fontSize: 10, fontWeight: '400' }}>
+                          {new Date(item.createdAt).toDateString()}
+                        </Text>
                       </Text>
                       <Text>{item.text}</Text>
                     </View>
@@ -271,6 +429,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  loadingBox: {
+    height: 250,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
   image: {
     alignSelf: 'center',
     height: 171,
@@ -285,8 +449,9 @@ const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     width: '100%',
-    gap: 4,
+    marginVertical: 8,
   },
   title: {
     fontSize: 18,

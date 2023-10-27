@@ -30,10 +30,6 @@ const Category: FCC<Props> = ({ onClick, data }) => {
 export default Category;
 
 const styles = StyleSheet.create({
-  image: {
-    height: 94,
-    width: 177,
-  },
   body: {
     width: '100%',
     paddingHorizontal: '5%',
@@ -55,7 +51,9 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   img: {
-    width: '100%',
+    width: 54,
+    height: 54,
+    borderRadius: 27,
   },
   nameCategory: {
     flex: 0.9,

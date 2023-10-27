@@ -13,6 +13,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import BottomTab from '.';
+import PostCategory from '@/modules/postCategory';
+import Product from '@/modules/catetory';
 
 const AppNavigation: FCC = () => {
   const Stack = createNativeStackNavigator<RootStackRoute>();
@@ -37,6 +39,10 @@ const AppNavigation: FCC = () => {
             <Stack.Screen name="home" component={BottomTab} />
             <Stack.Screen name="search" component={Search} />
             <Stack.Screen name="detailRooms" component={DetailRooms} />
+            <Stack.Group>
+              <Stack.Screen name="category" component={Product} />
+              <Stack.Screen name="categoryPost" component={PostCategory} />
+            </Stack.Group>
           </>
         ) : (
           <>

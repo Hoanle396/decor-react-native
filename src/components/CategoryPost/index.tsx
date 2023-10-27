@@ -33,9 +33,8 @@ const CategoryPost: FCC<Props> = ({ name, category }) => {
     navigation.navigate('detailRooms', { id: String(id) });
   };
 
-  const onSeeMore = ({ id, name }: { id: string; name: string }) => {
-    navigation.navigate('categoryPost', { id, name });
-    //bug
+  const onSeeMore = () => {
+    navigation.navigate('categoryPost', { id: category.id, name });
   };
 
   return (
@@ -46,9 +45,7 @@ const CategoryPost: FCC<Props> = ({ name, category }) => {
           variants="text"
           style={{ height: 20, padding: 0 }}
           textStyle={{ fontSize: 12 }}
-          onPress={() =>
-            onSeeMore({ id: String(category.id), name: category.name })
-          }
+          onPress={onSeeMore}
         >
           see more
         </Button>

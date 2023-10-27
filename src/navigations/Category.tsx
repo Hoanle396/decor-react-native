@@ -32,7 +32,6 @@ const AddPostNavigation = () => {
       }}
     >
       <Stack.Screen name="new" component={AddPost} />
-      <Stack.Screen name="success" component={PostCategory} />
     </Stack.Navigator>
   );
 };

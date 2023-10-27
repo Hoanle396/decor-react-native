@@ -7,6 +7,7 @@ import { FCC } from '@/types';
 import { RootStackRoute } from '@/types/navigation';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
 import React, { useState } from 'react';
 import {
   Image,
@@ -18,8 +19,6 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
-import * as SecureStore from 'expo-secure-store';
-import { toast } from '@backpackapp-io/react-native-toast';
 
 const Register: FCC<{}> = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(true);
@@ -48,17 +47,6 @@ const Register: FCC<{}> = () => {
   const { mutate } = useMutation(register, {
     onSuccess: async () =>
       await mutateAsync({ password: password, username: email }),
-    onError: () => {
-      toast.error('Email or password incorect', {
-        duration: 3000,
-        styles: {
-          view: { backgroundColor: color.background.default },
-          text: {
-            color: color.error.main,
-          },
-        },
-      });
-    },
   });
 
   const handleRegister = () => {

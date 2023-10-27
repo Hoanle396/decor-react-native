@@ -24,6 +24,7 @@ import { useMutation } from 'react-query';
 import * as SecureStore from 'expo-secure-store';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useAuthStore } from '@/redux';
+import { toast } from '@backpackapp-io/react-native-toast';
 
 const Login: FCC<{}> = () => {
   const [isPasswordShown, setIsPasswordShown] = useToggle(true);
@@ -44,6 +45,17 @@ const Login: FCC<{}> = () => {
       updateFullName(data.user.fullname ?? '');
       updateIsLogin(true);
       navigation.navigate('home');
+    },
+    onError: () => {
+      toast.error('Email or password incorect', {
+        duration: 3000,
+        styles: {
+          view: { backgroundColor: color.background.default },
+          text: {
+            color: color.error.main,
+          },
+        },
+      });
     },
   });
 

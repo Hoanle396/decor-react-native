@@ -6,7 +6,6 @@ import { Picker } from '@react-native-picker/picker';
 import React, { useEffect, useState } from 'react';
 import {
   Modal,
-  TextInput as RNTextInput,
   StyleSheet,
   Text,
   TextInputProps,
@@ -18,26 +17,18 @@ import Button from '../Button';
 type Props = TextInputProps & {
   label?: string | JSX.Element;
   rightIcon?: JSX.Element;
-  active?: boolean;
-  error?: string;
-  data?: {
-    value: string;
-    label: string;
-  }[];
+  data?: string[];
 };
 
-const SelectInput: FCC<Props> = ({
+const FilterSelect: FCC<Props> = ({
   style,
   label,
-  active = false,
-  error,
   rightIcon,
   onChangeText = _ => {},
   value = '',
   data = [],
-  ...props
 }) => {
-  const [toggle, onToggle] = useToggle(active);
+  const [toggle, onToggle] = useToggle(false);
   const [selected, setSelected] = useState(value);
 
   useEffect(() => {
@@ -46,41 +37,32 @@ const SelectInput: FCC<Props> = ({
 
   return (
     <View>
-      <View
-        style={[
-          styles.container,
-          toggle && styles.active,
-          !!error && styles.error,
-        ]}
-      >
-        {!!label && (
-          <Text
-            style={[
-              styles.label,
-              toggle && styles.labelActive,
-              error && styles.labelError,
-            ]}
-          >
-            {label}
-          </Text>
-        )}
-        <RNTextInput
-          editable={false}
-          selectTextOnFocus={false}
-          onPressOut={onToggle}
-          value={data.find(item => item.value === value)?.label ?? ''}
-          {...props}
-          style={[style, styles.input]}
-        />
-        <TouchableOpacity style={styles.rightIcon} onPress={onToggle}>
+      <TouchableOpacity onPress={onToggle}>
+        <View style={styles.container}>
+          {value ? (
+            <Text
+              style={[styles.label, style]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {value}
+            </Text>
+          ) : (
+            <Text
+              style={[styles.label, style]}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {label}
+            </Text>
+          )}
           {rightIcon ? (
             <>{rightIcon}</>
           ) : (
             <Ionicons name="chevron-down" size={18} color={color.primary} />
           )}
-        </TouchableOpacity>
-      </View>
-      {!!error && <Text style={styles.labelError}>! {error}</Text>}
+        </View>
+      </TouchableOpacity>
       <Modal animationType="slide" transparent={true} visible={toggle}>
         <View style={styles.modal}>
           <Text style={styles.modalTitle}>{!!label && label}</Text>
@@ -90,11 +72,7 @@ const SelectInput: FCC<Props> = ({
           >
             {data &&
               data.map(item => (
-                <Picker.Item
-                  key={item.value}
-                  label={item.label}
-                  value={item.value}
-                />
+                <Picker.Item key={item} label={item} value={item} />
               ))}
           </Picker>
           <Button onPress={onToggle}>Choose</Button>
@@ -104,46 +82,22 @@ const SelectInput: FCC<Props> = ({
   );
 };
 
-export default SelectInput;
+export default FilterSelect;
 
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    borderRadius: 16,
-    backgroundColor: color.background.secondary,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 3,
     width: '100%',
-    height: 56,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    borderWidth: 1.5,
-    borderColor: color.background.secondary,
-  },
-  active: {
-    borderColor: color.primary,
-    backgroundColor: color.background.default,
   },
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: color.text.dark,
-  },
-  input: {
-    fontSize: 16,
-    height: 24,
-    color: color.text.main,
-  },
-  labelActive: {
     color: color.primary,
   },
-  error: {
-    borderColor: color.error.main,
-    backgroundColor: color.background.default,
-  },
-  labelError: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: color.error.main,
-  },
+
   rightIcon: {
     position: 'absolute',
     bottom: 5,
