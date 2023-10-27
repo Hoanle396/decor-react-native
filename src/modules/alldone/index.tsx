@@ -1,10 +1,18 @@
 import Button from '@/components/Button';
 import { color } from '@/constants/color';
 import { FCC } from '@/types';
+import { RootStackRoute } from '@/types/navigation';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, View, Text } from 'react-native';
 
 const Alldone: FCC<{}> = () => {
+  const navigation = useNavigation<NavigationProp<RootStackRoute, 'alldone'>>();
+
+  const onPress = () => {
+    navigation.navigate('home');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -19,7 +27,9 @@ const Alldone: FCC<{}> = () => {
           source={require('@/assets/beatifull.png')}
           alt="beatifull img"
         />
-        <Button style={styles.button}>Trải nghiệm thôi</Button>
+        <Button style={styles.button} onPress={onPress}>
+          Trải nghiệm thôi
+        </Button>
       </View>
     </SafeAreaView>
   );

@@ -1,7 +1,8 @@
-import { register } from '@/apis/auth/request';
+import { login, register } from '@/apis/auth/request';
 import Button from '@/components/Button';
 import TextInput from '@/components/TextField/TextInput';
 import { color } from '@/constants/color';
+import { useAuthStore } from '@/redux';
 import { FCC } from '@/types';
 import { RootStackRoute } from '@/types/navigation';
 import { Entypo, Ionicons } from '@expo/vector-icons';
@@ -17,6 +18,8 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useMutation } from 'react-query';
+import * as SecureStore from 'expo-secure-store';
+import { toast } from '@backpackapp-io/react-native-toast';
 
 const Register: FCC<{}> = () => {
   const [isPasswordShown, setIsPasswordShown] = useState(true);
@@ -31,9 +34,30 @@ const Register: FCC<{}> = () => {
   const navigation =
     useNavigation<NavigationProp<RootStackRoute, 'register'>>();
 
+  const { updateFullName, updateIsLogin } = useAuthStore(state => state);
+  const { mutateAsync } = useMutation(login, {
+    onSuccess: async data => {
+      await SecureStore.setItemAsync('access_token', data.access_token);
+      await SecureStore.setItemAsync('refresh_token', data.refresh_token);
+      updateFullName(data.user.fullname ?? '');
+      updateIsLogin(true);
+      navigation.navigate('alldone');
+    },
+  });
+
   const { mutate } = useMutation(register, {
-    onSuccess: () => {
-      navigation.navigate('login');
+    onSuccess: async () =>
+      await mutateAsync({ password: password, username: email }),
+    onError: () => {
+      toast.error('Email or password incorect', {
+        duration: 3000,
+        styles: {
+          view: { backgroundColor: color.background.default },
+          text: {
+            color: color.error.main,
+          },
+        },
+      });
     },
   });
 
