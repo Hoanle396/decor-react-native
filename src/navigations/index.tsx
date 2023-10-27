@@ -2,7 +2,7 @@ import { color } from '@/constants/color';
 import Home from '@/modules/home';
 import Profile from '@/modules/profile';
 import Search from '@/modules/search';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import {
   BottomTabBar,
   createBottomTabNavigator,
@@ -43,10 +43,10 @@ const BottomTab = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.iconTop}>
-              <Ionicons
-                name="home-outline"
+              <Feather
+                name="home"
                 size={30}
-                color={focused ? color.primary : color.text.dark}
+                color={focused ? color.black : color.text.light}
               />
             </View>
           ),
@@ -61,7 +61,7 @@ const BottomTab = () => {
               <Ionicons
                 name="search"
                 size={30}
-                color={focused ? color.primary : color.text.dark}
+                color={focused ? color.black : color.text.light}
               />
             </View>
           ),
@@ -79,7 +79,7 @@ const BottomTab = () => {
                 style={{
                   alignSelf: 'flex-end',
                 }}
-                color={focused ? color.primary : color.text.dark}
+                color={focused ? color.black : color.text.light}
               />
             </View>
           ),
@@ -91,10 +91,10 @@ const BottomTab = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.iconTop}>
-              <Ionicons
-                name="settings-outline"
+              <MaterialIcons
+                name="category"
                 size={30}
-                color={focused ? color.primary : color.text.dark}
+                color={focused ? color.black : color.text.light}
               />
             </View>
           ),
@@ -106,10 +106,10 @@ const BottomTab = () => {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.iconTop}>
-              <Ionicons
+              <MaterialIcons
                 name="person-outline"
                 size={30}
-                color={focused ? color.primary : color.text.dark}
+                color={focused ? color.black : color.text.light}
               />
             </View>
           ),
