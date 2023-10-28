@@ -3,7 +3,7 @@ import { useToggle } from '@/hooks/useToggle';
 import { FCC } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Modal,
   TextInput as RNTextInput,
@@ -33,16 +33,11 @@ const SelectInput: FCC<Props> = ({
   error,
   rightIcon,
   onChangeText = _ => {},
-  value = '',
+  value,
   data = [],
   ...props
 }) => {
   const [toggle, onToggle] = useToggle(active);
-  const [selected, setSelected] = useState(value);
-
-  useEffect(() => {
-    onChangeText && onChangeText(selected);
-  }, [onChangeText, selected]);
 
   return (
     <View>
@@ -85,8 +80,8 @@ const SelectInput: FCC<Props> = ({
         <View style={styles.modal}>
           <Text style={styles.modalTitle}>{!!label && label}</Text>
           <Picker
-            selectedValue={selected}
-            onValueChange={itemValue => setSelected(itemValue)}
+            selectedValue={value}
+            onValueChange={itemValue => onChangeText && onChangeText(itemValue)}
           >
             {data &&
               data.map(item => (

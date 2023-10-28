@@ -3,7 +3,7 @@ import { FCC } from '@/types';
 import { ImageTypes } from '@/types/utils';
 import { Ionicons } from '@expo/vector-icons';
 import { MediaTypeOptions, launchImageLibraryAsync } from 'expo-image-picker';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   Image,
   TextInput as RNTextInput,
@@ -30,12 +30,11 @@ const ImageInput: FCC<Props> = ({
   active = false,
   error,
   rightIcon,
-  onValueChange,
-  imageList,
+  onValueChange = () => {},
+  imageList = [],
   ...props
 }) => {
-  const [photo, setPhoto] = React.useState<ImageTypes[]>(imageList);
-  const height = useMemo(() => (photo.length > 0 ? 150 : 24), [photo]);
+  const height = useMemo(() => (imageList.length > 0 ? 150 : 24), [imageList]);
 
   const handleChoosePhoto = async () => {
     try {
@@ -46,16 +45,12 @@ const ImageInput: FCC<Props> = ({
         selectionLimit: 5,
       });
       if (!res.canceled) {
-        setPhoto(res.assets as ImageTypes[]);
+        onValueChange && onValueChange(res.assets as ImageTypes[]);
       }
     } catch (e) {
       throw e;
     }
   };
-
-  useEffect(() => {
-    onValueChange && onValueChange(photo);
-  }, [onValueChange, photo]);
 
   return (
     <View>
@@ -78,7 +73,7 @@ const ImageInput: FCC<Props> = ({
             {label}
           </Text>
         )}
-        {!!photo && (
+        {!!imageList && (
           <ScrollView
             horizontal={true}
             pagingEnabled
@@ -87,7 +82,7 @@ const ImageInput: FCC<Props> = ({
               gap: 8,
             }}
           >
-            {photo.map(({ uri }) => (
+            {imageList.map(({ uri }) => (
               <Image
                 key={uri}
                 source={{ uri: uri }}
@@ -95,7 +90,7 @@ const ImageInput: FCC<Props> = ({
               />
             ))}
             <TouchableOpacity
-              onPress={() => setPhoto([])}
+              onPress={() => onValueChange([])}
               style={[styles.imagePreview, styles.boxClear]}
             >
               <Ionicons name="close" size={32} color={color.primary} />
