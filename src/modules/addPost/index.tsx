@@ -25,7 +25,7 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 type Props = {};
 
@@ -52,11 +52,14 @@ const AddPost: FCC<Props> = () => {
     navigation.canGoBack() && navigation.goBack();
   };
 
+  const query = useQueryClient();
+
   const onPublishSuccess = () => {
     setName('');
     setCategory('');
     setDescription('');
     setImageList([]);
+    query.invalidateQueries({ queryKey: ['category/id'] });
     navigation.navigate('Dashboard');
   };
 
