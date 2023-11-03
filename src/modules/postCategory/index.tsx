@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     justifyContent: 'space-between',
-    gap: 15,
+    gap: 5,
     rowGap: 25,
     flexWrap: 'wrap',
     paddingHorizontal: '7%',
