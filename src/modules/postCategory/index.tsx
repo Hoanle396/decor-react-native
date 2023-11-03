@@ -9,20 +9,25 @@ import { RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React, { useMemo, useState } from 'react';
 import {
-  Image,
+  Animated,
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Text,
   View,
 } from 'react-native';
 type Props = {
   navigation: NativeStackNavigationProp<RootStackRoute, 'detailRooms'>;
   route: RouteProp<{ params: { id: string; name: string } }, 'params'>;
 };
+
+const HEADER_MAX_HEIGHT = 111;
+const HEADER_MIN_HEIGHT = 20;
+const HEADER_SCROLL_DISTANCE = 91;
+
 const PostCategory: FCC<Props> = ({ navigation, route }) => {
   const [time, setTime] = useState('');
   const [category, setCategory] = useState('');
+  const [scrollY] = useState(new Animated.Value(0));
 
   const { id, name } = route.params;
 
@@ -38,14 +43,55 @@ const PostCategory: FCC<Props> = ({ navigation, route }) => {
     [categories.data],
   );
 
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [HEADER_MAX_HEIGHT, HEADER_MIN_HEIGHT],
+    extrapolate: 'clamp',
+  });
+
+  const imageOpacity = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
+    outputRange: [1, 1, 0],
+    extrapolate: 'clamp',
+  });
+
+  const textTranslate = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [10, -10],
+    extrapolate: 'clamp',
+  });
+
+  const fontSize = scrollY.interpolate({
+    inputRange: [0, HEADER_SCROLL_DISTANCE],
+    outputRange: [20, 24],
+    extrapolate: 'clamp',
+  });
+
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        style={styles.image}
-        source={require('@/assets/logo.png')}
-        alt="Logo Image"
-      />
-      <Text style={styles.text2}>{name}</Text>
+      <Animated.View style={{ height: headerHeight }}>
+        <Animated.Image
+          style={[
+            styles.image,
+            {
+              opacity: imageOpacity,
+              height: headerHeight,
+              width: headerHeight,
+            },
+          ]}
+          source={require('@/assets/logo.png')}
+        />
+      </Animated.View>
+      <Animated.View>
+        <Animated.Text
+          style={[
+            styles.title,
+            { fontSize: fontSize, transform: [{ translateY: textTranslate }] },
+          ]}
+        >
+          {name}
+        </Animated.Text>
+      </Animated.View>
       <View style={styles.body}>
         <MaterialIcons name="filter-list" size={24} color="black" />
         <FilterSelect
@@ -65,7 +111,25 @@ const PostCategory: FCC<Props> = ({ navigation, route }) => {
         />
         <Feather name="filter" size={24} color="black" />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: scrollY,
+                },
+              },
+            },
+          ],
+          {
+            useNativeDriver: false,
+          },
+        )}
+      >
         <View style={styles.product}>
           {isLoading && (
             <>
@@ -99,8 +163,8 @@ const styles = StyleSheet.create({
   },
   image: {
     alignSelf: 'center',
-    height: 111,
-    width: 171,
+    height: HEADER_MAX_HEIGHT,
+    resizeMode: 'cover',
   },
   body: {
     width: '100%',
@@ -109,11 +173,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-  },
-  text2: {
-    fontSize: 30,
-    fontWeight: '700',
-    textAlign: 'center',
   },
   text: {
     fontSize: 13,
@@ -134,5 +193,11 @@ const styles = StyleSheet.create({
     rowGap: 25,
     flexWrap: 'wrap',
     paddingHorizontal: '7%',
+  },
+
+  title: {
+    fontSize: 30,
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });

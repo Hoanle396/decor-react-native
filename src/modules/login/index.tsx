@@ -120,11 +120,11 @@ const Login: FCC<{}> = () => {
               }
               rightIcon={
                 <TouchableOpacity onPress={setIsPasswordShown}>
-                  {isPasswordShown ? (
-                    <Ionicons name="eye" size={18} color={color.primary} />
-                  ) : (
-                    <Ionicons name="eye-off" size={18} color={color.primary} />
-                  )}
+                  <Ionicons
+                    name={`eye${isPasswordShown ? '-off' : ''}`}
+                    size={18}
+                    color={color.primary}
+                  />
                 </TouchableOpacity>
               }
             />

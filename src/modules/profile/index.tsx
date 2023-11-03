@@ -16,28 +16,37 @@ import {
 
 import * as SecureStore from 'expo-secure-store';
 import { useAuthStore } from '@/redux';
+import { useNavigation } from '@react-navigation/native';
 
 const Profile: FCC<{}> = () => {
-  const { updateFullName, updateIsLogin } = useAuthStore(state => state);
+  const { updateFullName, updateIsLogin, fullname } = useAuthStore();
+
+  const navigation = useNavigation();
   const onLogout = async () => {
     await SecureStore.deleteItemAsync('access_token');
     await SecureStore.deleteItemAsync('refresh_token');
     updateFullName('');
     updateIsLogin(false);
   };
+
+  const onBack = () => {
+    navigation.canGoBack() && navigation.goBack();
+  };
   return (
     <>
-      <Header leftBtnVariant="back" onPressLeftButton={() => {}} />
+      <Header leftBtnVariant="back" onPressLeftButton={onBack} />
       <SafeAreaView style={styles.root}>
         <ScrollView
           style={[{ flex: 1 }, styles.root]}
           showsVerticalScrollIndicator={false}
         >
           <View style={[styles.header]}>
-            <Text style={styles.name}>Thuy duong</Text>
+            <Text style={styles.name}>{fullname}</Text>
             <Image
               style={styles.image}
-              source={require('@/assets/avatarn.png')}
+              source={{
+                uri: 'http://s3.amazonaws.com/37assets/svn/765-default-avatar.png',
+              }}
               alt="avartar"
             />
           </View>
@@ -91,6 +100,7 @@ const styles = StyleSheet.create({
   image: {
     height: 90,
     width: 90,
+    borderRadius: 45,
   },
   name: {
     fontSize: 20,

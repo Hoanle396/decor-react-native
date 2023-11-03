@@ -100,11 +100,11 @@ const Register: FCC<{}> = () => {
                 <TouchableOpacity
                   onPress={() => setIsPasswordShown(!isPasswordShown)}
                 >
-                  {isPasswordShown ? (
-                    <Ionicons name="eye" size={18} color={color.primary} />
-                  ) : (
-                    <Ionicons name="eye-off" size={18} color={color.primary} />
-                  )}
+                  <Ionicons
+                    name={`eye${isPasswordShown ? '-off' : ''}`}
+                    size={18}
+                    color={color.primary}
+                  />
                 </TouchableOpacity>
               }
             />
@@ -133,11 +133,11 @@ const Register: FCC<{}> = () => {
                     setIsConfirmPasswordShown(!isConfirmPasswordShown)
                   }
                 >
-                  {isConfirmPasswordShown ? (
-                    <Ionicons name="eye" size={18} color={color.primary} />
-                  ) : (
-                    <Ionicons name="eye-off" size={18} color={color.primary} />
-                  )}
+                  <Ionicons
+                    name={`eye${isConfirmPasswordShown ? '-off' : ''}`}
+                    size={18}
+                    color={color.primary}
+                  />
                 </TouchableOpacity>
               }
             />
